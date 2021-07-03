@@ -1,6 +1,8 @@
 # CRUD_application_2.0
 
-Необходимо реализовать консольное CRUD приложение, которое имеет следующие сущности:
+<a href="https://www.codefactor.io/repository/github/yhtyyar/crud_application_2.0"><img src="https://www.codefactor.io/repository/github/yhtyyar/crud_application_2.0/badge" alt="CodeFactor" /></a>
+
+Необходимо реализовать консольное CRUD приложение, которое взаимодействует с БД и позволяет выполнять все CRUD операции над сущностями:
 
 Writer(id,  firstName,  lastName,  List<Post> posts,  Region region)
 
