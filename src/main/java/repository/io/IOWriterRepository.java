@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class IOWriterRepository implements WriterRepository {
 
-    private final String FILE_NAME = "src/main/resources/writers.sql";
+    private final String FILE_NAME = "src/main/resources/db.migration/writers.sql";
     private final File file = new File(FILE_NAME);
 
     private PostRepository postRepository;

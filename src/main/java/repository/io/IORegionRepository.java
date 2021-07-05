@@ -7,6 +7,8 @@ import java.util.List;
 
 public class IORegionRepository implements RegionRepository {
 
+    private final static String FILE_NAME = "src/main/resources/db.migration/writers.sql";
+
 
     @Override
     public Region getById(Long id) {
