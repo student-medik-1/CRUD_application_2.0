@@ -5,6 +5,9 @@ public class Region implements Storable{
     private Long id;
     private String regionName;
 
+    public Region() {
+    }
+
     public Region(Long id) {
         this.id = id;
     }

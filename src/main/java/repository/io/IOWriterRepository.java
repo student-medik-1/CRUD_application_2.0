@@ -6,30 +6,28 @@ import model.Writer;
 import repository.PostRepository;
 import repository.RegionRepository;
 import repository.WriterRepository;
+import util.IOUtil;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class IOWriterRepository implements WriterRepository {
 
     private final String FILE_NAME = "src/main/resources/db.migration/writers.sql";
-    private final File file = new File(FILE_NAME);
 
-    private PostRepository postRepository;
-    private RegionRepository regionRepository;
+
+    private final PostRepository postRepository;
+    private final RegionRepository regionRepository;
 
 
     public IOWriterRepository() {
         this.postRepository = new IOPostRepository();
         this.regionRepository = new IORegionRepository();
-
     }
 
 
     @Override
     public Writer getById(Long id) {
-
         List<Writer> writerList = getAll();
 
         Optional<Writer> writer = writerList.stream()
@@ -46,6 +44,7 @@ public class IOWriterRepository implements WriterRepository {
         updateWriterId(writer);
 
         String recorded = writerToStringRecorded(writer);
+        IOUtil.write(FILE_NAME, recorded);
 
         return writer;
     }
@@ -90,22 +89,19 @@ public class IOWriterRepository implements WriterRepository {
 
     @Override
     public List<Writer> getAll() {
-        String fileString = null; // дописать
+        List<String> fileString = IOUtil.read(FILE_NAME);
 
-        if (fileString.length() == 0 || !fileString.contains(".")) {
-            return new ArrayList<>();
-        }
 
-        String [] writers = fileString.split(".");
+        return fileString.stream()
+                .map(s -> {
 
-        return Arrays.stream(writers).map(s -> {
             String [] writerParts = s.split(" | ");
-
             return new Writer(Long.valueOf(writerParts[0]),
                     writerParts[1],
                     writerParts[2],
                     postListFromString(writerParts[3]),
                     getRegion(Long.valueOf(writerParts[4])));
+
         }).collect(Collectors.toList());
     }
 
