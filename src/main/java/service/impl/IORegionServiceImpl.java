@@ -26,10 +26,9 @@ public class IORegionServiceImpl implements RegionService {
     public void create(String regionName) {
         Region region = new Region();
 
-        region.setId(regionRepository.getLastId() + 1);
         region.setRegionName(regionName);
 
-        regionRepository.save(region);
+        regionRepository.create(region);
     }
 
 

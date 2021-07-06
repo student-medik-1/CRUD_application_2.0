@@ -1,7 +1,6 @@
-package repository.io;
+package repository.jdbc.io;
 
 import model.Post;
-import model.Region;
 import repository.PostRepository;
 import util.IOUtil;
 
@@ -30,19 +29,19 @@ public class IOPostRepository implements PostRepository {
 
 
     @Override
-    public Post save(Post post) {
+    public void create(Post post) {
         updatePostId(post);
 
         String recording = post.getId() + " | " + post.getPosts() + " | "
                 + post.getCreated() + " | " + post.getUpdated();
         IOUtil.write(FILE_NAME, recording);
 
-        return post;
+
     }
 
 
     @Override
-    public Post update(Post post) {
+    public void update(Post post) {
         List<Post> postsList = getAll();
 
         Optional<Post> resultPostOptional = postsList.stream()
@@ -54,7 +53,6 @@ public class IOPostRepository implements PostRepository {
 
         saveAll(postsList);
 
-        return resultPost;
     }
 
 
@@ -92,16 +90,7 @@ public class IOPostRepository implements PostRepository {
                 }).collect(Collectors.toList());
     }
 
-    @Override
-    public Long getLastId() {
-        List<Post> fileList = getAll();
 
-        if (fileList.size() != 0) {
-            return fileList.get(fileList.size() - 1).getId();
-        }
-
-        return 0L;
-    }
 
 
     private void saveAll(List<Post> list) {

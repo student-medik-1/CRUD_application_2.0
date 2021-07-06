@@ -28,13 +28,12 @@ public class IOWriterServiceImpl implements WriterService {
 
         Writer writer = new Writer();
 
-        writer.setId(writerRepository.getLastId() + 1);
         writer.setFirstName(firstName);
         writer.setLastName(lastName);
         writer.setPosts(posts);
         writer.setRegionName(regionName);
 
-        writerRepository.save(writer);
+        writerRepository.create(writer);
     }
 
 
@@ -48,7 +47,7 @@ public class IOWriterServiceImpl implements WriterService {
         writer.setPosts(posts);
         writer.setRegionName(regionName);
 
-        writerRepository.save(writer);
+        writerRepository.create(writer);
     }
 
 

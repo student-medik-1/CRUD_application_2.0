@@ -1,4 +1,4 @@
-package repository.io;
+package repository.jdbc.io;
 
 import model.Post;
 import model.Region;
@@ -6,15 +6,17 @@ import model.Writer;
 import repository.PostRepository;
 import repository.RegionRepository;
 import repository.WriterRepository;
+import repository.jdbc.JdbcConnection;
 import util.IOUtil;
 
-import java.time.LocalDateTime;
+import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class IOWriterRepository implements WriterRepository {
 
     private final String FILE_NAME = "src/main/resources/db.migration/writers.sql";
+
 
 
     private final PostRepository postRepository;
@@ -41,18 +43,13 @@ public class IOWriterRepository implements WriterRepository {
 
 
     @Override
-    public Writer save(Writer writer) {
-        updateWriterId(writer);
+    public void create(Writer writer) {
 
-        String recorded = writerToStringRecorded(writer);
-        IOUtil.write(FILE_NAME, recorded);
-
-        return writer;
     }
 
 
     @Override
-    public Writer update(Writer writer) {
+    public void update(Writer writer) {
         List<Writer> writerList = getAll();
 
         Optional<Writer> resultUserOptional = writerList.stream()
@@ -69,7 +66,6 @@ public class IOWriterRepository implements WriterRepository {
 
         saveAll(writerList);
 
-        return (Writer) writerList;
     }
 
 
@@ -106,16 +102,7 @@ public class IOWriterRepository implements WriterRepository {
                 }).collect(Collectors.toList());
     }
 
-    @Override
-    public Long getLastId() {
-        List<Writer> fileList = getAll();
 
-        if (fileList.size() != 0) {
-            return fileList.get(fileList.size() - 1).getId();
-        }
-
-        return 0L;
-    }
 
     private void updateWriterId(Writer writer) {
 

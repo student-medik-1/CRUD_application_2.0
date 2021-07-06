@@ -24,11 +24,10 @@ public class IOPostServiceImpl implements PostService {
     public void create(String posts, LocalDateTime created) {
         Post post = new Post();
 
-        post.setId(postRepository.getLastId() + 1);
         post.setPosts(posts);
         post.setCreated(created);
 
-        postRepository.save(post);
+        postRepository.create(post);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class IOPostServiceImpl implements PostService {
         post.setCreated(created);
         post.setUpdated(updated);
 
-        postRepository.save(post);
+        postRepository.create(post);
     }
 
     @Override
