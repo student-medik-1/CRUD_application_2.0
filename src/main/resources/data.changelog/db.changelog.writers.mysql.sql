@@ -1,4 +1,4 @@
--- liquibase formatted sql
+-- liquibase.properties formatted sql
 -- changeset admin:new table
 CREATE TABLE test1
 (

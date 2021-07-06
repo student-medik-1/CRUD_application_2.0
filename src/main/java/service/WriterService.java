@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface WriterService extends GenericService<Writer, Long> {
 
-    void create(String firstName, String secondName, List<Post> posts, Region regionName);
-    void update(Long id, String firstName, String secondName, List<Post> posts, Region regionName);
+    void create(String firstName, String lastName, List<Post> posts, Region regionName);
+    void update(Long id, String firstName, String lastName, List<Post> posts, Region regionName);
 }

@@ -9,6 +9,9 @@ public class Post implements Storable{
     private LocalDateTime created;
     private LocalDateTime updated;
 
+    public Post() {
+    }
+
     public Post(Long id) {
         this.id = id;
     }

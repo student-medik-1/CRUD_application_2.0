@@ -8,6 +8,7 @@ import repository.RegionRepository;
 import repository.WriterRepository;
 import util.IOUtil;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,14 +96,25 @@ public class IOWriterRepository implements WriterRepository {
         return fileString.stream()
                 .map(s -> {
 
-            String [] writerParts = s.split(" | ");
-            return new Writer(Long.valueOf(writerParts[0]),
-                    writerParts[1],
-                    writerParts[2],
-                    postListFromString(writerParts[3]),
-                    getRegion(Long.valueOf(writerParts[4])));
+                    String[] writerParts = s.split(" | ");
+                    return new Writer(Long.valueOf(writerParts[0]),
+                            writerParts[1],
+                            writerParts[2],
+                            postListFromString(writerParts[3]),
+                            getRegion(Long.valueOf(writerParts[4])));
 
-        }).collect(Collectors.toList());
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long getLastId() {
+        List<Writer> fileList = getAll();
+
+        if (fileList.size() != 0) {
+            return fileList.get(fileList.size() - 1).getId();
+        }
+
+        return 0L;
     }
 
     private void updateWriterId(Writer writer) {
@@ -138,9 +150,9 @@ public class IOWriterRepository implements WriterRepository {
     }
 
 
-    private List<Post> postListFromString (String encodePostList) {
+    private List<Post> postListFromString(String encodePostList) {
 
-        String [] postsId = encodePostList.split(" | ");
+        String[] postsId = encodePostList.split(" | ");
 
         if (postsId.length == 1 && postsId[0].equals("0")) {
             return new ArrayList<>();
@@ -157,9 +169,13 @@ public class IOWriterRepository implements WriterRepository {
 
     private void saveAll(List<Writer> list) {
 
-        StringBuilder stringBuilder = new StringBuilder();
+        List<String> writerList = new ArrayList<>();
 
-        list.forEach(writer -> stringBuilder.append(writerToStringRecorded(writer)));
+        for (Writer writer : list) {
+            writerList.add(writer.toString());
+        }
+
+        IOUtil.writeList(FILE_NAME, writerList);
     }
 
 

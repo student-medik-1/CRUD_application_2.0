@@ -33,7 +33,7 @@ public class IOPostRepository implements PostRepository {
     public Post save(Post post) {
         updatePostId(post);
 
-        String recording = post.getId() + " | " + post.getPosts()  + " | "
+        String recording = post.getId() + " | " + post.getPosts() + " | "
                 + post.getCreated() + " | " + post.getUpdated();
         IOUtil.write(FILE_NAME, recording);
 
@@ -54,7 +54,7 @@ public class IOPostRepository implements PostRepository {
 
         saveAll(postsList);
 
-        return  resultPost;
+        return resultPost;
     }
 
 
@@ -90,6 +90,17 @@ public class IOPostRepository implements PostRepository {
                             LocalDateTime.parse(parts[updated]));
 
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long getLastId() {
+        List<Post> fileList = getAll();
+
+        if (fileList.size() != 0) {
+            return fileList.get(fileList.size() - 1).getId();
+        }
+
+        return 0L;
     }
 
 

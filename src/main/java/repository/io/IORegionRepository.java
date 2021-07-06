@@ -1,10 +1,12 @@
 package repository.io;
 
+import model.Post;
 import model.Region;
 import repository.RegionRepository;
 import util.IOUtil;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,9 +22,9 @@ public class IORegionRepository implements RegionRepository {
     @Override
     public Region getById(Long id) {
 
-        List <Region> regionList = getAll();
+        List<Region> regionList = getAll();
 
-        Optional <Region> region = regionList.stream()
+        Optional<Region> region = regionList.stream()
                 .filter((r) -> r.getId() == id)
                 .findFirst();
         return region.orElseThrow(() ->
@@ -37,15 +39,15 @@ public class IORegionRepository implements RegionRepository {
         String recording = region.getId() + " | " + region.getRegionName() + ".";
         IOUtil.write(FILE_NAME, recording);
 
-        return  region;
+        return region;
     }
 
 
     @Override
     public Region update(Region regionName) {
-        List <Region> regionList = getAll();
+        List<Region> regionList = getAll();
 
-        Optional <Region> resultRegion = regionList.stream()
+        Optional<Region> resultRegion = regionList.stream()
                 .filter((r) -> r.getId() == regionName.getId())
                 .findFirst();
 
@@ -62,10 +64,10 @@ public class IORegionRepository implements RegionRepository {
 
     @Override
     public void deleteById(Long id) {
-        List <Region> regionList = getAll();
+        List<Region> regionList = getAll();
 
         Optional<Region> region = regionList.stream()
-                .filter((r) ->r.getId() == id)
+                .filter((r) -> r.getId() == id)
                 .findFirst();
 
         regionList.remove(region.orElseThrow(() ->
@@ -85,10 +87,22 @@ public class IORegionRepository implements RegionRepository {
         return fileList.stream()
                 .map((s) -> {
 
-            String[] parts = s.split(" | ");
-            return new Region(Long.valueOf(parts[id]),
-                                           parts[regionName]);
+                    String[] parts = s.split(" | ");
+                    return new Region(Long.valueOf(parts[id]),
+                            parts[regionName]);
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long getLastId() {
+        List<Region> fileList = getAll();
+
+
+        if (fileList.size() != 0) {
+            return fileList.get(fileList.size() - 1).getId();
+        }
+
+        return 0L;
     }
 
 

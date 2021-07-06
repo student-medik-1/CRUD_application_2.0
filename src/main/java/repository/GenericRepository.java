@@ -9,4 +9,5 @@ public interface GenericRepository <T,ID>{
     T update (T t);
     void deleteById (ID id);
     List<T> getAll();
+    ID getLastId();
 }

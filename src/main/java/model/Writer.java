@@ -10,6 +10,9 @@ public class Writer implements Storable{
     private List<Post> posts;
     private Region regionName;
 
+    public Writer() {
+    }
+
 
     public Writer(String firstName, String lastName, Region regionName) {
         this.firstName = firstName;
@@ -17,12 +20,12 @@ public class Writer implements Storable{
         this.regionName = regionName;
     }
 
+
     public Writer(Long id, String firstName, String lastName, List<Post> posts, Region regionName) {
 
         this(firstName, lastName, regionName);
         this.id = id;
         this.posts = posts;
-
     }
 
 
@@ -33,43 +36,51 @@ public class Writer implements Storable{
 
     }
 
+
     @Override
     public Long getId() {
         return id;
     }
 
+
     public String getFirstName() {
         return firstName;
     }
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+
     public String getLastName() {
         return lastName;
     }
+
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+
     public List<Post> getPosts() {
         return posts;
     }
+
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
 
+
     public Region getRegionName() {
         return regionName;
     }
 
+
     public void setRegionName(Region regionName) {
         this.regionName = regionName;
     }
-
 
 
     @Override
