@@ -1,6 +1,5 @@
 package service.impl;
 
-import model.Post;
 import model.Region;
 import model.Writer;
 import repository.WriterRepository;
@@ -8,11 +7,11 @@ import service.WriterService;
 
 import java.util.List;
 
-public class IOWriterServiceImpl implements WriterService {
+public class WriterServiceImpl implements WriterService {
 
     private final WriterRepository writerRepository;
 
-    public IOWriterServiceImpl(WriterRepository writerRepository) {
+    public WriterServiceImpl(WriterRepository writerRepository) {
         this.writerRepository = writerRepository;
     }
 
@@ -33,7 +32,6 @@ public class IOWriterServiceImpl implements WriterService {
         writer.setRegionName(regionName);
 
         writerRepository.create(writer);
-
         return writer;
     }
 
@@ -47,8 +45,7 @@ public class IOWriterServiceImpl implements WriterService {
         writer.setLastName(lastName);
         writer.setRegionName(regionName);
 
-        writerRepository.create(writer);
-
+        writerRepository.update(writer);
         return writer;
     }
 

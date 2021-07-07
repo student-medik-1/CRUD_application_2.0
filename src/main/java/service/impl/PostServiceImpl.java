@@ -7,11 +7,11 @@ import service.PostService;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class IOPostServiceImpl implements PostService {
+public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public IOPostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
@@ -40,6 +40,7 @@ public class IOPostServiceImpl implements PostService {
         post.setUpdated(updated);
 
         postRepository.create(post);
+
         return post;
     }
 

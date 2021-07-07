@@ -16,17 +16,32 @@ public class Post implements Storable{
         this.id = id;
     }
 
-    public Post(Long id, String posts, LocalDateTime created, LocalDateTime updated) {
-        this.id = id;
-        this.content = posts;
+
+    public Post(String content) {
+        this.content = content;
+        created =  LocalDateTime.now();
+        updated = LocalDateTime.now();
+    }
+
+
+    public Post (String content, LocalDateTime created) {
+        this.content = content;
         this.created = created;
+    }
+
+
+    public Post(Long id, String content,  LocalDateTime updated) {
+        this.id = id;
+        this.content = content;
         this.updated = updated;
     }
 
-    public Post(String posts) {
-        this.content = posts;
-        created =  LocalDateTime.now();
-        updated = LocalDateTime.now();
+
+    public Post(Long id, String content, LocalDateTime created, LocalDateTime updated) {
+        this.id = id;
+        this.content = content;
+        this.created = created;
+        this.updated = updated;
     }
 
 

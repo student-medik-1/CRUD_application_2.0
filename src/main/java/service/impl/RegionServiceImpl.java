@@ -7,12 +7,12 @@ import service.RegionService;
 
 import java.util.List;
 
-public class IORegionServiceImpl implements RegionService {
+public class RegionServiceImpl implements RegionService {
 
     private  RegionRepository regionRepository = new JdbcRegionRepositoryImpl();
 
 
-    public IORegionServiceImpl(RegionRepository regionRepository) {
+    public RegionServiceImpl(RegionRepository regionRepository) {
 
         this.regionRepository = regionRepository;
     }

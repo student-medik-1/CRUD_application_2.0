@@ -20,6 +20,11 @@ public class Writer implements Storable{
         this.regionName = regionName;
     }
 
+    public Writer(Long id, String firstName, String lastName, Region regionName) {
+
+        this(firstName, lastName, regionName);
+        this.id = id;
+    }
 
     public Writer(Long id, String firstName, String lastName, List<Post> posts, Region regionName) {
 

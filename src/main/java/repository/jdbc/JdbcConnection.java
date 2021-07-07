@@ -12,8 +12,6 @@ public class JdbcConnection {
 
     private static Connection connection;
 
-    public JdbcConnection() {
-    }
 
     public static Connection getConnection() {
 
@@ -28,6 +26,5 @@ public class JdbcConnection {
 
         return connection;
     }
-
 
 }
