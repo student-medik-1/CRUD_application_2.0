@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 
 public interface PostService extends GenericService<Post, Long> {
 
-    void create(String posts, LocalDateTime created);
-    void update(Long id, String posts, LocalDateTime created, LocalDateTime updated);
+    Post create(String posts, LocalDateTime created);
+    Post update(Long id, String posts, LocalDateTime updated);
 }

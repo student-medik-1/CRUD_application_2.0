@@ -24,38 +24,38 @@ public class IOWriterServiceImpl implements WriterService {
 
 
     @Override
-    public void create(String firstName, String lastName, List<Post> posts, Region regionName) {
+    public Writer create(String firstName, String lastName, Region regionName) {
 
         Writer writer = new Writer();
 
         writer.setFirstName(firstName);
         writer.setLastName(lastName);
-        writer.setPosts(posts);
         writer.setRegionName(regionName);
 
         writerRepository.create(writer);
+
+        return writer;
     }
 
 
     @Override
-    public void update(Long id, String firstName, String lastName, List<Post> posts, Region regionName) {
+    public Writer update(Long id, String firstName, String lastName, Region regionName) {
         Writer writer = new Writer();
 
         writer.setId(id);
         writer.setFirstName(firstName);
         writer.setLastName(lastName);
-        writer.setPosts(posts);
         writer.setRegionName(regionName);
 
         writerRepository.create(writer);
+
+        return writer;
     }
 
 
     @Override
     public void delete(Long id) {
-        Writer writer = getById(id);
-
-        writerRepository.deleteById(writer.getId());
+        writerRepository.deleteById(id);
     }
 
 

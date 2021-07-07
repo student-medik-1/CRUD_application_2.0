@@ -2,13 +2,14 @@ package service.impl;
 
 import model.Region;
 import repository.RegionRepository;
+import repository.jdbc.JdbcRegionRepositoryImpl;
 import service.RegionService;
 
 import java.util.List;
 
 public class IORegionServiceImpl implements RegionService {
 
-    private final RegionRepository regionRepository;
+    private  RegionRepository regionRepository = new JdbcRegionRepositoryImpl();
 
 
     public IORegionServiceImpl(RegionRepository regionRepository) {
@@ -22,18 +23,21 @@ public class IORegionServiceImpl implements RegionService {
         return regionRepository.getById(id);
     }
 
+
     @Override
-    public void create(String regionName) {
+    public Region create(String regionName) {
         Region region = new Region();
 
         region.setRegionName(regionName);
 
         regionRepository.create(region);
+
+        return region;
     }
 
 
     @Override
-    public void update(Long id, String regionName) {
+    public Region update(Long id, String regionName) {
         Region region = new Region();
 
         region.setId(id);
@@ -41,14 +45,15 @@ public class IORegionServiceImpl implements RegionService {
 
         regionRepository.update(region);
 
+        return region;
     }
+
 
     @Override
     public void delete(Long id) {
-        Region region = getById(id);
-
-        regionRepository.deleteById(region.getId());
+        regionRepository.deleteById(id);
     }
+
 
     @Override
     public List<Region> getAll() {

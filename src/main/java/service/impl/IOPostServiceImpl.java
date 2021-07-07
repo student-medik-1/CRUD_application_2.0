@@ -21,32 +21,31 @@ public class IOPostServiceImpl implements PostService {
     }
 
     @Override
-    public void create(String posts, LocalDateTime created) {
+    public Post create(String content, LocalDateTime created) {
         Post post = new Post();
 
-        post.setPosts(posts);
+        post.setContent(content);
         post.setCreated(created);
 
         postRepository.create(post);
+        return post;
     }
 
     @Override
-    public void update(Long id, String posts, LocalDateTime created, LocalDateTime updated) {
+    public Post update(Long id, String content, LocalDateTime updated) {
         Post post = new Post();
 
         post.setId(id);
-        post.setPosts(posts);
-        post.setCreated(created);
+        post.setContent(content);
         post.setUpdated(updated);
 
         postRepository.create(post);
+        return post;
     }
 
     @Override
     public void delete(Long id) {
-        Post post = getById(id);
-
-        postRepository.deleteById(post.getId());
+        postRepository.deleteById(id);
     }
 
     @Override

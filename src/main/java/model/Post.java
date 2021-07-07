@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Post implements Storable{
 
     private Long id;
-    private String posts;
+    private String content;
     private LocalDateTime created;
     private LocalDateTime updated;
 
@@ -18,13 +18,13 @@ public class Post implements Storable{
 
     public Post(Long id, String posts, LocalDateTime created, LocalDateTime updated) {
         this.id = id;
-        this.posts = posts;
+        this.content = posts;
         this.created = created;
         this.updated = updated;
     }
 
     public Post(String posts) {
-        this.posts = posts;
+        this.content = posts;
         created =  LocalDateTime.now();
         updated = LocalDateTime.now();
     }
@@ -40,12 +40,12 @@ public class Post implements Storable{
         return id;
     }
 
-    public String getPosts() {
-        return posts;
+    public String getContent() {
+        return content;
     }
 
-    public void setPosts(String posts) {
-        this.posts = posts;
+    public void setContent(String content) {
+        this.content = content;
         updated = LocalDateTime.now();
     }
 
@@ -70,7 +70,7 @@ public class Post implements Storable{
     @Override
     public void copyFrom(Storable storable) {
 
-        this.posts = ((Post)storable).getPosts();
+        this.content = ((Post)storable).getContent();
         updated = LocalDateTime.now();
     }
 
@@ -80,6 +80,6 @@ public class Post implements Storable{
                 "ID: " + id +
                 " | created: " + created +
                 " | updated: " + updated +
-                "\n post: " + posts;
+                "\n content: " + content;
     }
 }
