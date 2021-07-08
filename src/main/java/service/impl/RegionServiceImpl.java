@@ -26,9 +26,8 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Region create(String regionName) {
-        Region region = new Region();
 
-        region.setRegionName(regionName);
+        Region region = new Region(regionName);
 
         regionRepository.create(region);
 
@@ -38,10 +37,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Region update(Long id, String regionName) {
-        Region region = new Region();
-
-        region.setId(id);
-        region.setRegionName(regionName);
+        Region region = new Region(id, regionName);
 
         regionRepository.update(region);
 

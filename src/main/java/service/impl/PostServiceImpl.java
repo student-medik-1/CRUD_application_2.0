@@ -22,10 +22,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post create(String content, LocalDateTime created) {
-        Post post = new Post();
-
-        post.setContent(content);
-        post.setCreated(created);
+        Post post = new Post(content,created);
 
         postRepository.create(post);
         return post;
@@ -33,11 +30,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post update(Long id, String content, LocalDateTime updated) {
-        Post post = new Post();
-
-        post.setId(id);
-        post.setContent(content);
-        post.setUpdated(updated);
+        Post post = new Post(id, content, updated);
 
         postRepository.create(post);
 

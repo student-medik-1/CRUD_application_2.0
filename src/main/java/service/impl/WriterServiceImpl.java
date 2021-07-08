@@ -25,11 +25,7 @@ public class WriterServiceImpl implements WriterService {
     @Override
     public Writer create(String firstName, String lastName, Region regionName) {
 
-        Writer writer = new Writer();
-
-        writer.setFirstName(firstName);
-        writer.setLastName(lastName);
-        writer.setRegionName(regionName);
+        Writer writer = new Writer(firstName, lastName, regionName);
 
         writerRepository.create(writer);
         return writer;
@@ -38,12 +34,8 @@ public class WriterServiceImpl implements WriterService {
 
     @Override
     public Writer update(Long id, String firstName, String lastName, Region regionName) {
-        Writer writer = new Writer();
 
-        writer.setId(id);
-        writer.setFirstName(firstName);
-        writer.setLastName(lastName);
-        writer.setRegionName(regionName);
+        Writer writer = new Writer(id, firstName, lastName, regionName);
 
         writerRepository.update(writer);
         return writer;

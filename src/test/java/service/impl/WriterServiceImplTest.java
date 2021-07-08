@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import repository.WriterRepository;
+import service.WriterService;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class WriterServiceImplTest {
     private static final String first = "Sergey";
     private static final String last = "Dovlatov";
 
+
     private static final Region regionName = new Region("Canada");
     private static final Writer writerCreate = new Writer(first, last, regionName);
     private static final Writer writerUpdate = new Writer(id, first, last, regionName);
@@ -36,11 +37,9 @@ public class WriterServiceImplTest {
     @Mock
     private List<Writer> writerList;
 
-    @Mock
-    private WriterRepository writerRepository;
-
     @Spy
-    private final WriterServiceImpl writerService = new WriterServiceImpl(writerRepository);
+    private WriterService writerService;
+
 
     @Before
     public void setUp() {
@@ -62,17 +61,16 @@ public class WriterServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(writerCreate).when(writerService).create("Sergey", "Dovlatov",
-                new Region("Canada"));
-        //assertEquals(writerCreate, writerService.create("Sergey", "Dovlatov", regionName));
+        doReturn(writerCreate).when(writerService).create("Sergey", "Dovlatov",regionName);
+        assertEquals(writerCreate, writerService.create("Sergey", "Dovlatov", regionName));
     }
 
 
     @Test
     public void updateTest() {
         doReturn(writerUpdate).when(writerService).update(1L, "Sergey", "Dovlatov",
-                new Region("Canada"));
-        //assertEquals(writerUpdate, writerService.update(id, first, last, regionName));
+                regionName);
+        assertEquals(writerUpdate, writerService.update(id, first, last, regionName));
     }
 
     @Test
