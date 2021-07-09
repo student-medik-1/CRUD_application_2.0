@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Writer implements Storable{
+public class Writer{
 
     private Long id;
     private String firstName;
@@ -13,36 +13,34 @@ public class Writer implements Storable{
     public Writer() {
     }
 
-
-    public Writer(String firstName, String lastName, Region regionName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.regionName = regionName;
-    }
-
-    public Writer(Long id, String firstName, String lastName, Region regionName) {
-
-        this(firstName, lastName, regionName);
+    public Writer(Long id) {
         this.id = id;
     }
 
-    public Writer(Long id, String firstName, String lastName, List<Post> posts, Region regionName) {
+    public Writer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
-        this(firstName, lastName, regionName);
+    public Writer(Long id, String firstName, String lastName) {
+
+        this(firstName, lastName);
+        this.id = id;
+    }
+
+    public Writer(Long id, String firstName, String lastName, List<Post> posts) {
+
+        this(firstName, lastName);
         this.id = id;
         this.posts = posts;
     }
 
 
-    @Override
     public void setId(Long id) {
-
         this.id = id;
-
     }
 
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -88,17 +86,6 @@ public class Writer implements Storable{
     }
 
 
-    @Override
-    public void copyFrom(Storable storable) {
-
-        Writer storableWriter = (Writer) storable;
-
-        this.firstName = storableWriter.getFirstName();
-        this.lastName = storableWriter.getLastName();
-        this.posts = storableWriter.getPosts();
-        this.regionName = storableWriter.getRegionName();
-    }
-
 
     @Override
     public String toString() {
@@ -108,12 +95,13 @@ public class Writer implements Storable{
         if (posts != null && posts.size() > 0) {
 
             for (Post post : posts) {
-
                 postBuilder.append(post).append(" ");
-
             }
+        } else {
+            postBuilder.append("null");
         }
+
         return "Writer | "  + id + " | " + firstName +   " | " + lastName +
-                " | " + regionName.getRegionName() + " | " + postBuilder.toString();
+                " | " + regionName + " | " + postBuilder.toString();
     }
 }

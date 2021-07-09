@@ -1,9 +1,11 @@
 package model;
 
-public class Region implements Storable{
+public class Region {
 
     private Long id;
     private String regionName;
+    private Writer writer;
+
 
     public Region() {
     }
@@ -12,43 +14,58 @@ public class Region implements Storable{
         this.id = id;
     }
 
+
     public Region(String regionName) {
         this.regionName = regionName;
     }
+
 
     public Region(Long id, String regionName) {
         this.id = id;
         this.regionName = regionName;
     }
 
-    @Override
+
+    public Region(String regionName,Long writerId) {
+        this.regionName = regionName;
+        writer = new Writer(writerId);
+    }
+
+
+    public Region(Long id, String regionName, Long writerId) {
+        this.id = id;
+        this.regionName = regionName;
+        writer = new Writer(writerId);
+    }
+
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Override
 
     public Long getId() {
         return id;
     }
 
+
     public void setRegionName(String regionName) {
         this.regionName = regionName;
     }
+
 
     public String getRegionName() {
         return regionName;
     }
 
 
-
-    @Override
-    public void copyFrom(Storable storable) {
-        this.regionName = ((Region)storable).getRegionName();
+    public Writer getWriter() {
+        return writer;
     }
 
-    @Override
-    public String toString() {
-        return "Region: " + "ID: " + id + " Region name: " +  regionName;
+
+    public void setWriter(Writer writer) {
+        this.writer = writer;
     }
+
 }

@@ -12,22 +12,23 @@ import static repository.jdbc.JdbcUtils.*;
 
 public class JdbcWriterRepositoryImpl implements WriterRepository {
 
-    private ResultSet resultSet;
-    private PreparedStatement statement;
+    private PreparedStatement preparedStatement;
+    private Statement statement;
+    ResultSet resultSet;
 
 
     @Override
     public Writer getById(Long id) {
 
         try {
-            statement = JdbcConnection.getConnection().prepareStatement(WRITER_GET_BY_ID);
-            statement.setLong(1,id);
+            preparedStatement = JdbcConnection.getConnection().prepareStatement(WRITER_GET_BY_ID);
+            preparedStatement.setLong(1,id);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         try {
-            resultSet = statement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -38,7 +39,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             writer.setId(resultSet.getLong("id"));
             writer.setFirstName(resultSet.getString("first_name"));
             writer.setLastName(resultSet.getString("last_name"));
-            writer.setPosts((List<Post>) resultSet.getObject("posts"));
+            writer.setPosts((List<Post>) resultSet.getObject("content"));
             writer.setRegionName((Region) resultSet.getObject("region_name"));
 
         } catch (SQLException throwables) {
@@ -47,7 +48,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         try {
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -59,22 +60,32 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     @Override
     public Writer create(Writer writer) {
 
+        String firstName =  "'" + writer.getFirstName() + "'";
+        String lastName = "'" + writer.getLastName() + "'";
 
         try {
-            statement = JdbcConnection.getConnection().prepareStatement(WRITER_CREATE);
-            statement.setString(1, writer.getFirstName());
-            statement.setString(2,writer.getLastName());
-            statement.setObject(3,writer.getRegionName());
+            preparedStatement = JdbcConnection.getConnection().prepareStatement(WRITER_CREATE);
+
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2,lastName);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        try {
-            writer.setId(resultSet.getLong("id"));
-            writer.setFirstName(resultSet.getString("first_name"));
-            writer.setLastName(resultSet.getString("last_name"));
-            writer.setRegionName((Region) resultSet.getObject("region_name"));
+
+        try (Statement statement = JdbcConnection.getConnection().createStatement()){
+
+            resultSet = statement.executeQuery(RESULT_WRITER_CREATE);
+
+            if (resultSet.next()) {
+
+                writer.setId(Long.valueOf(resultSet.getString(1)));
+                writer.setFirstName(resultSet.getString(2));
+                writer.setLastName(resultSet.getString(3));
+                writer.setRegionName((Region) resultSet.getObject(4));
+                writer.setPosts((List<Post>) resultSet.getObject(5));
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -82,13 +93,12 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         try {
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         return writer;
-
     }
 
 
@@ -96,20 +106,22 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer update(Writer writer) {
 
         try {
-            statement = JdbcConnection.getConnection().prepareStatement(WRITER_UPDATE);
-            statement.setString(1, writer.getFirstName());
-            statement.setString(2,writer.getLastName());
-            statement.setObject(3,writer.getRegionName());
-            statement.setLong(4,writer.getId());
+            preparedStatement = JdbcConnection.getConnection().prepareStatement(WRITER_UPDATE);
+            preparedStatement.setString(1, writer.getFirstName());
+            preparedStatement.setString(2,writer.getLastName());
+            preparedStatement.setLong(3,writer.getId());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         try {
+            resultSet = preparedStatement.executeQuery();
+
             writer.setId(resultSet.getLong("id"));
             writer.setFirstName(resultSet.getString("first_name"));
             writer.setLastName(resultSet.getString("last_name"));
+            writer.setPosts((List<Post>) resultSet.getObject("content"));
             writer.setRegionName((Region) resultSet.getObject("region_name"));
 
         } catch (SQLException throwables) {
@@ -118,7 +130,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         try {
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -131,16 +143,16 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public void deleteById(Long id) {
 
         try {
-            statement = JdbcConnection.getConnection().prepareStatement(WRITERS_DELETE);
-            statement.setLong(1, id);
+            preparedStatement = JdbcConnection.getConnection().prepareStatement(WRITER_DELETE);
+            preparedStatement.setLong(1, id);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         try {
-            statement.executeUpdate();
-            statement.close();
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -153,7 +165,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         List<Writer> writerList = new ArrayList<>();
 
-        Statement statement = null;
+
         try {
             statement = JdbcConnection.getConnection().createStatement();
         } catch (SQLException throwables) {
@@ -177,7 +189,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 writer.setId(resultSet.getLong("id"));
                 writer.setFirstName(resultSet.getString("first_name"));
                 writer.setLastName(resultSet.getString("last_name"));
-                writer.setPosts((List<Post>) resultSet.getObject("posts"));
+                writer.setPosts((List<Post>) resultSet.getObject("content"));
                 writer.setRegionName((Region) resultSet.getObject("region_name"));
 
             } catch (SQLException throwables) {

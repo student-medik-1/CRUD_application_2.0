@@ -1,14 +1,11 @@
 package service.impl;
 
-import model.Region;
 import model.Writer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import service.WriterService;
 
 import java.util.List;
 
@@ -19,16 +16,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class WriterServiceImplTest {
 
-
-
     private static final Long id = 1L;
     private static final String first = "Sergey";
     private static final String last = "Dovlatov";
 
-
-    private static final Region regionName = new Region("Canada");
-    private static final Writer writerCreate = new Writer(first, last, regionName);
-    private static final Writer writerUpdate = new Writer(id, first, last, regionName);
+    private static final Writer writerCreate = new Writer(first, last);
+    private static final Writer writerUpdate = new Writer(id, first, last);
 
 
     @Mock
@@ -37,8 +30,8 @@ public class WriterServiceImplTest {
     @Mock
     private List<Writer> writerList;
 
-    @Spy
-    private WriterService writerService;
+    @Mock
+    private WriterServiceImpl writerService;
 
 
     @Before
@@ -61,16 +54,15 @@ public class WriterServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(writerCreate).when(writerService).create("Sergey", "Dovlatov",regionName);
-        assertEquals(writerCreate, writerService.create("Sergey", "Dovlatov", regionName));
+        doReturn(writerCreate).when(writerService).create("Sergey", "Dovlatov");
+        assertEquals(writerCreate, writerService.create("Sergey", "Dovlatov"));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(writerUpdate).when(writerService).update(1L, "Sergey", "Dovlatov",
-                regionName);
-        assertEquals(writerUpdate, writerService.update(id, first, last, regionName));
+        doReturn(writerUpdate).when(writerService).update(1L, "Sergey", "Dovlatov");
+        assertEquals(writerUpdate, writerService.update(id, first, last));
     }
 
     @Test

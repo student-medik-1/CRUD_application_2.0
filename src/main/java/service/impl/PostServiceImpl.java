@@ -2,18 +2,14 @@ package service.impl;
 
 import model.Post;
 import repository.PostRepository;
+import repository.jdbc.JdbcPostRepositoryImpl;
 import service.PostService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class PostServiceImpl implements PostService {
 
-    private final PostRepository postRepository;
-
-    public PostServiceImpl(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+    private final PostRepository postRepository = new JdbcPostRepositoryImpl();
 
     @Override
     public Post getById(Long id) {
@@ -21,20 +17,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post create(String content, LocalDateTime created) {
-        Post post = new Post(content,created);
+    public Post create(String content, Long writer_id) {
 
-        postRepository.create(post);
-        return post;
+        postRepository.create(new Post(content, writer_id));
+        return new Post(content, writer_id);
     }
 
     @Override
-    public Post update(Long id, String content, LocalDateTime updated) {
-        Post post = new Post(id, content, updated);
+    public Post update(Long id, String content,  Long writer_id) {
 
-        postRepository.create(post);
-
-        return post;
+        postRepository.create(new Post(id, content,  writer_id));
+        return new Post(id, content,  writer_id);
     }
 
     @Override

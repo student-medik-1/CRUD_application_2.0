@@ -1,19 +1,15 @@
 package service.impl;
 
-import model.Region;
 import model.Writer;
 import repository.WriterRepository;
+import repository.jdbc.JdbcWriterRepositoryImpl;
 import service.WriterService;
 
 import java.util.List;
 
 public class WriterServiceImpl implements WriterService {
 
-    private final WriterRepository writerRepository;
-
-    public WriterServiceImpl(WriterRepository writerRepository) {
-        this.writerRepository = writerRepository;
-    }
+    private final WriterRepository writerRepository = new JdbcWriterRepositoryImpl();
 
 
     @Override
@@ -23,22 +19,18 @@ public class WriterServiceImpl implements WriterService {
 
 
     @Override
-    public Writer create(String firstName, String lastName, Region regionName) {
+    public Writer create(String firstName, String lastName) {
 
-        Writer writer = new Writer(firstName, lastName, regionName);
-
-        writerRepository.create(writer);
-        return writer;
+        writerRepository.create(new Writer(firstName, lastName));
+        return new Writer(firstName, lastName);
     }
 
 
     @Override
-    public Writer update(Long id, String firstName, String lastName, Region regionName) {
+    public Writer update(Long id, String firstName, String lastName) {
 
-        Writer writer = new Writer(id, firstName, lastName, regionName);
-
-        writerRepository.update(writer);
-        return writer;
+        writerRepository.update(new Writer(id, firstName, lastName));
+        return new Writer(id, firstName, lastName);
     }
 
 

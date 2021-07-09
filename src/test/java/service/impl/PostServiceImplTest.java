@@ -5,11 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import service.PostService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -22,11 +19,10 @@ public class PostServiceImplTest {
 
     private static final Long id = 1L;
     private static final String content = "content";
-    private static final LocalDateTime created = LocalDateTime.now();
-    private static final LocalDateTime updated = LocalDateTime.now();
+    private static final Long writerId = 2L;
 
-    private static final Post postCreate = new Post(content, created);
-    private static final Post postUpdated = new Post(id, content, updated);
+    private static final Post postCreate = new Post(content,  2L);
+    private static final Post postUpdated = new Post(id, content,  writerId);
 
     @Mock
     private Post post;
@@ -34,8 +30,8 @@ public class PostServiceImplTest {
     @Mock
     private List<Post> postList;
 
-    @Spy
-    private PostService postService;
+    @Mock
+    private PostServiceImpl postService;
 
 
     @Before
@@ -53,15 +49,15 @@ public class PostServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(postCreate).when(postService).create(content, created);
-        assertEquals(postCreate, postService.create(content, created));
+        doReturn(postCreate).when(postService).create(content, writerId);
+        assertEquals(postCreate, postService.create(content,  2L));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(postUpdated).when(postService).update(1L, content, updated);
-        assertEquals(postUpdated, postService.update(1L, content, updated));
+        doReturn(postUpdated).when(postService).update(1L, content,  2L);
+        assertEquals(postUpdated, postService.update(1L, content,  writerId));
     }
 
 

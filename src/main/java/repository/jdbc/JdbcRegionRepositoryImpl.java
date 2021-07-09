@@ -1,6 +1,7 @@
 package repository.jdbc;
 
 import model.Region;
+import model.Writer;
 import repository.RegionRepository;
 
 
@@ -33,7 +34,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
         try {
             resultSet = statement.executeQuery();
             region.setId(resultSet.getLong("id"));
-            region.setRegionName(resultSet.getString("name"));
+            region.setRegionName(resultSet.getString("region_name"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,10 +52,11 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region create(Region region) {
-
+        Writer writer = new Writer();
         try {
             statement = JdbcConnection.getConnection().prepareStatement(REGION_CREATE);
             statement.setString(1, region.getRegionName());
+            statement.setLong(2, writer.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,7 +65,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
             resultSet = statement.executeQuery();
 
             region.setId(resultSet.getLong("id"));
-            region.setRegionName(resultSet.getString("name"));
+            region.setRegionName(resultSet.getString("region_name"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,12 +83,13 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region update(Region region) {
-
+        Writer writer = new Writer();
         try {
             statement = JdbcConnection.getConnection().prepareStatement(REGION_UPDATE);
 
             statement.setString(1, region.getRegionName());
-            statement.setLong(2,region.getId());
+            statement.setLong(2, writer.getId());
+            statement.setLong(3, region.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,7 +98,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
             resultSet = statement.executeQuery();
 
             region.setId(resultSet.getLong("id"));
-            region.setRegionName(resultSet.getString("name"));
+            region.setRegionName(resultSet.getString("region_name"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -150,7 +153,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
                 }
 
                 region.setId(resultSet.getLong("id"));
-                region.setRegionName(resultSet.getString("name"));
+                region.setRegionName(resultSet.getString("region_name"));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

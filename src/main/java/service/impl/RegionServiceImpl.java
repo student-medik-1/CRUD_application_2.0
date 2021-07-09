@@ -9,14 +9,7 @@ import java.util.List;
 
 public class RegionServiceImpl implements RegionService {
 
-    private  RegionRepository regionRepository = new JdbcRegionRepositoryImpl();
-
-
-    public RegionServiceImpl(RegionRepository regionRepository) {
-
-        this.regionRepository = regionRepository;
-    }
-
+    private final RegionRepository regionRepository = new JdbcRegionRepositoryImpl();
 
     @Override
     public Region getById(Long id) {
@@ -25,23 +18,16 @@ public class RegionServiceImpl implements RegionService {
 
 
     @Override
-    public Region create(String regionName) {
+    public Region create(String regionName,Long writerId) {
 
-        Region region = new Region(regionName);
-
-        regionRepository.create(region);
-
-        return region;
+        return regionRepository.create(new Region(regionName,writerId));
     }
 
 
     @Override
-    public Region update(Long id, String regionName) {
-        Region region = new Region(id, regionName);
+    public Region update(Long id, String regionName,Long writerId) {
 
-        regionRepository.update(region);
-
-        return region;
+        return regionRepository.update(new Region(id, regionName,writerId));
     }
 
 

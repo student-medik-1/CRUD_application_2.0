@@ -1,7 +1,7 @@
--- liquibase.properties formatted sql changeLogId:ca03bd62-c2fb-411e-88fd-83111a24d37e
+-- liquibase formatted sql
 
---changeset Yhtyyar:1
-CREATE TABLE writers
+-- changeset Yhtyyar:1
+CREATE TABLE IF NOT EXISTS writers
 (
     id         INT          NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(100) NOT NULL,
@@ -9,10 +9,10 @@ CREATE TABLE writers
     PRIMARY KEY (id)
 );
 
-CREATE TABLE regions
+CREATE TABLE IF NOT EXISTS regions
 (
-    id          INT                         NOT NULL AUTO_INCREMENT,
-    region_name VARCHAR(100)                NOT NULL UNIQUE,
+    id          INT NOT NULL AUTO_INCREMENT,
+    region_name VARCHAR(100) DEFAULT NULL UNIQUE,
     writer_id   INT REFERENCES writers (id),
     PRIMARY KEY (id)
 );
@@ -20,10 +20,10 @@ CREATE TABLE regions
 ALTER TABLE regions
     ADD FOREIGN KEY (writer_id) REFERENCES writers (id);
 
-CREATE TABLE posts
+CREATE TABLE IF NOT EXISTS posts
 (
-    id        INT                         NOT NULL AUTO_INCREMENT,
-    content   VARCHAR(255)                NOT NULL,
+    id        INT NOT NULL AUTO_INCREMENT,
+    content   VARCHAR(255) DEFAULT NULL,
     created   TIMESTAMP,
     updated   TIMESTAMP,
     writer_id INT REFERENCES writers (id),
@@ -32,3 +32,5 @@ CREATE TABLE posts
 
 ALTER TABLE posts
     ADD FOREIGN KEY (writer_id) REFERENCES writers (id);
+
+

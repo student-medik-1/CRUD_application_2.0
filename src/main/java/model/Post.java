@@ -1,13 +1,12 @@
 package model;
 
-import java.time.LocalDateTime;
-
-public class Post implements Storable{
+public class Post {
 
     private Long id;
     private String content;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private Writer writer;
+
+
 
     public Post() {
     }
@@ -19,82 +18,56 @@ public class Post implements Storable{
 
     public Post(String content) {
         this.content = content;
-        created =  LocalDateTime.now();
-        updated = LocalDateTime.now();
     }
 
 
-    public Post (String content, LocalDateTime created) {
-        this.content = content;
-        this.created = created;
-    }
-
-
-    public Post(Long id, String content,  LocalDateTime updated) {
+    public Post(Long id, String content) {
         this.id = id;
         this.content = content;
-        this.updated = updated;
+
     }
 
 
-    public Post(Long id, String content, LocalDateTime created, LocalDateTime updated) {
+    public Post (String content, Long writerId) {
+        this.content = content;
+        writer = new Writer(writerId);
+    }
+
+
+    public Post(Long id, String content, Long writerId) {
         this.id = id;
         this.content = content;
-        this.created = created;
-        this.updated = updated;
+        writer = new Writer(writerId);
     }
 
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Override
+
     public Long getId() {
         return id;
     }
+
 
     public String getContent() {
         return content;
     }
 
+
     public void setContent(String content) {
         this.content = content;
-        updated = LocalDateTime.now();
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
     }
 
 
-
-    @Override
-    public void copyFrom(Storable storable) {
-
-        this.content = ((Post)storable).getContent();
-        updated = LocalDateTime.now();
+    public Writer getWriter() {
+        return writer;
     }
 
-    @Override
-    public String toString() {
-        return "Posts \n" +
-                "ID: " + id +
-                " | created: " + created +
-                " | updated: " + updated +
-                "\n content: " + content;
+
+    public void setWriter(Writer writer) {
+        this.writer = writer;
     }
+
 }

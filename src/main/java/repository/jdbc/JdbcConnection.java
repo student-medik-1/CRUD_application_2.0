@@ -1,16 +1,16 @@
 package repository.jdbc;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JdbcConnection {
 
-    private static final String DATA_BASE_URL = "jdbc:mysql://localhost:3306/MySQL";
+    private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String DATA_BASE_URL = "jdbc:mysql://localhost:3306/MySQL?useUnicode=true&serverTimezone=UTC";
     private static final String USER = "Yhtyyar";
     private static final String PASSWORD = "Ilyas-2009";
 
     private static Connection connection;
+
 
 
     public static Connection getConnection() {
@@ -18,7 +18,14 @@ public class JdbcConnection {
         if (connection == null) {
 
             try {
-                connection = DriverManager.getConnection(DATA_BASE_URL, USER, PASSWORD);
+                Class.forName(JDBC_DRIVER);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                 connection = DriverManager.getConnection(DATA_BASE_URL, USER, PASSWORD);
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }

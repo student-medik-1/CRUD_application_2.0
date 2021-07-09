@@ -1,17 +1,19 @@
 package repository.jdbc;
 
 import model.Post;
+import model.Writer;
 import repository.PostRepository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static repository.jdbc.JdbcUtils.*;
 
 public class JdbcPostRepositoryImpl implements PostRepository {
 
-    private ResultSet resultSet;
-    private PreparedStatement statement;
+    ResultSet resultSet;
+    PreparedStatement statement;
 
 
     @Override
@@ -31,8 +33,6 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             post.setId(resultSet.getLong("id"));
             post.setContent(resultSet.getString("posts"));
-            post.setCreated(resultSet.getTimestamp("created").toLocalDateTime());
-            post.setUpdated(resultSet.getTimestamp("updated").toLocalDateTime());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -52,10 +52,13 @@ public class JdbcPostRepositoryImpl implements PostRepository {
     @Override
     public Post create(Post post) {
 
+        Writer writer = new Writer();
+
         try {
             statement = JdbcConnection.getConnection().prepareStatement(POST_CREATE);
             statement.setString(1, post.getContent());
-            statement.setTimestamp(2, Timestamp.valueOf(post.getCreated()));
+            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setLong(3,writer.getId());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -67,7 +70,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             post.setId(resultSet.getLong("id"));
             post.setContent(resultSet.getString("posts"));
-            post.setCreated(resultSet.getTimestamp("created").toLocalDateTime());
+
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -87,11 +90,13 @@ public class JdbcPostRepositoryImpl implements PostRepository {
     @Override
     public Post update(Post post) {
 
+        Writer writer = new Writer();
         try {
             statement = JdbcConnection.getConnection().prepareStatement(POST_UPDATE);
             statement.setString(1, post.getContent());
-            statement.setTimestamp(2, Timestamp.valueOf(post.getUpdated()));
-            statement.setLong(3,post.getId());
+            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setLong(3,writer.getId());
+            statement.setLong(4,post.getId());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -102,7 +107,6 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             post.setId(resultSet.getLong("id"));
             post.setContent(resultSet.getString("posts"));
-            post.setCreated(resultSet.getTimestamp("updated").toLocalDateTime());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -166,8 +170,6 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
                 post.setId(resultSet.getLong("id"));
                 post.setContent(resultSet.getString("content"));
-                post.setCreated(resultSet.getTimestamp("created").toLocalDateTime());
-                post.setUpdated(resultSet.getTimestamp("updated").toLocalDateTime());
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

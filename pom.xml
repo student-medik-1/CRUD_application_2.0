@@ -51,7 +51,7 @@
 
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
-                    <changeLogFile>src/main/resources/db/changelog/db.changelog.mysql.sql</changeLogFile>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog.master.mysql.sql</changeLogFile>
                 </configuration>
 
                 <dependencies>

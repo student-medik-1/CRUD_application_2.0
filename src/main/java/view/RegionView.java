@@ -21,11 +21,13 @@ public class RegionView extends AbstractView {
     @Override
     void createNewRecord(String[] command) {
 
-        if (command.length > 1) {
-            regionController.create(command[1]);
+        int regionName = 1;
+        int writerId = 2;
 
+        if (command.length > 2) {
+            Region region = regionController.create(command[regionName], Long.valueOf(command[writerId]));
+            System.out.println(region.toString() + "\n");
             System.out.println("... Страна добавлена ...");
-            allRecord();
 
         } else {
             System.out.println("Нет необходимых данных для добавления " + CREATE);
@@ -38,13 +40,15 @@ public class RegionView extends AbstractView {
 
         int id = 1;
         int regionName = 2;
+        int writerId = 3;
 
-        if (command.length > 2) {
+        if (command.length > 3) {
             System.out.println("... Изменение записи ... \n");
             try {
-                regionController.update(Long.valueOf(command[id]), command[regionName]);
+                Region region = regionController.update(Long.valueOf(command[id]), command[regionName],
+                        Long.valueOf(command[writerId]));
+                System.out.println(region.toString() + "\n");
                 System.out.println("... Страна изменена ...");
-                allRecord();
 
             } catch (NumberFormatException e) {
                 System.out.println("Введена не правильная команда " + EDIT_BY_ID);
@@ -111,7 +115,6 @@ public class RegionView extends AbstractView {
 
                 regionController.deleteById(Long.valueOf(command[1]));
                 System.out.println("... Страна удалена ... \n");
-                allRecord();
 
             } catch (NumberFormatException e) {
                 System.out.println("Неправильная команда " + DELETE);
@@ -130,8 +133,8 @@ public class RegionView extends AbstractView {
 
         System.out.println("Записи будут  выводиться в виде: \n     ID | NAME_REGION \n" +
                 "Список команд для действий \n" +
-                CREATE + " NAME_REGION - добавить новую страну в список\n" +
-                EDIT_BY_ID + " ID NAME_REGION - изменение существующей страны \n" +
+                CREATE + " NAME_REGION WRITER_ID- добавить новую страну в список\n" +
+                EDIT_BY_ID + " ID NAME_REGION WRITER_ID - изменение существующей страны \n" +
                 GET_BY_ID + " ID - получить название страны по ID \n" +
                 GET_ALL + " - получение всех стран из списка \n" +
                 DELETE + " ID - удаление страны \n" +
