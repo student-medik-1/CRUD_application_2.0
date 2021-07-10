@@ -13,8 +13,6 @@ public class WriterView extends AbstractView {
     private static AbstractView abstractView;
     private final WriterController writerController;
 
-    private static final String WRITER_FIRST_NAME = "first_name";
-    private static final String WRITER_LAST_NAME = "last_name";
 
     public WriterView() {
         super(new Scanner(System.in), new PrintStream(System.out), "Список писателей ");
@@ -30,9 +28,9 @@ public class WriterView extends AbstractView {
 
         if (command.length > 2) {
 
-            Writer writer = writerController.create(new Writer(command[firstName], command[lastName]));
+            Writer writer = writerController.create(command[firstName], command[lastName]);
             try {
-                System.out.println("Writer | ID | FIRST_NAME | LAST_NAME | REGION | POSTS_ID \n");
+                System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Запись   |\n");
                 System.out.println(writer.toString() + "\n");
                 System.out.println("Новый писатель создан!");
 
@@ -58,8 +56,9 @@ public class WriterView extends AbstractView {
             System.out.println("... Изменение записи писателя ...");
 
             try {
-                Writer writer = writerController.update(new Writer(Long.valueOf(command[id]), command[firstName],
-                        command[lastName]));
+                Writer writer = writerController.update(Long.valueOf(command[id]), command[firstName],
+                        command[lastName]);
+                System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Запись   |\n");
                 System.out.println(writer.toString() + "\n");
                 System.out.println("... Изменения внесены ... ");
 
@@ -83,6 +82,7 @@ public class WriterView extends AbstractView {
 
             try {
                 Writer writer = writerController.getById(Long.valueOf(command[1]));
+                System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Запись   |\n");
                 System.out.println(writer.toString() + "\n");
 
             } catch (NumberFormatException e) {
@@ -103,11 +103,15 @@ public class WriterView extends AbstractView {
 
         System.out.println("... Получение всех данных ...");
 
-        List<Writer> writers = writerController.getAll();
+        List<Writer> writerList = writerController.getAll();
 
-        for (int i = 0; i < writers.size(); i++) {
+        if (writerList.size() > 0) {
+            System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Запись   |\n");
 
-            System.out.println(writers.get(i).toString());
+            writerList.forEach((w) -> System.out.println((w.toString())));
+
+        } else{
+            System.out.println("Список писателей пуст");
         }
 
     }
@@ -121,8 +125,6 @@ public class WriterView extends AbstractView {
 
             try {
                 writerController.deleteById(Long.valueOf(command[1]));
-
-                System.out.println("... Данные удалены ...");
 
             } catch (NumberFormatException e) {
                 System.out.println("Неправильная команда " + DELETE);
@@ -141,15 +143,12 @@ public class WriterView extends AbstractView {
     @Override
     void helpMe() {
 
-        System.out.println("Данные про писателей будет выводиться в виде:  \n" +
-                "ID | FIRST_NAME | LAST_NAME | REGION | POSTS_ID \n" +
-                CREATE + " FIRST_NAME  LAST_NAME  - создание нового пользователя \n" +
+        System.out.println("          Список команд для действий: \n\n"  +
+                CREATE + " 'Имя'  'Фамилия'  - создание нового пользователя \n" +
+                GET_BY_ID + " 'ID' - получение одного из писателей по ID \n" +
                 GET_ALL + " - получение данных про всех писателей \n" +
-                GET_BY_ID + " ID - получение одного из писателей по ID \n" +
-                EDIT_BY_ID + " " + WRITER_FIRST_NAME + " " + WRITER_LAST_NAME + " " +
-                "  ID FIRST_NAME LAST_NAME - изменить данные писателя по ID \n" +
-                " (вводите ID записей(постов) разделенными пробелом) \n" +
-                DELETE + " - удаление писателя по ID  \n" +
+                EDIT_BY_ID + "  'ID' 'Имя'  'Фамилия' - изменить данные писателя по ID \n" +
+                DELETE + " 'ID' - удаление писателя по ID  \n" +
                 BACK_TO_BEGINNING + " - вернуться в начало программы\n" +
                 EXIT + " - выход из программы");
     }

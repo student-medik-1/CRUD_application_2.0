@@ -22,8 +22,6 @@ public class WriterServiceImplTest {
     private static final String first = "Sergey";
     private static final String last = "Dovlatov";
 
-    private static final Writer writerCreate = new Writer(first, last);
-    private static final Writer writerUpdate = new Writer(id, first, last);
 
 
     @Mock
@@ -56,15 +54,15 @@ public class WriterServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(writerCreate).when(writerService).create(new Writer("Sergey", "Dovlatov"));
-        assertEquals(writerCreate, writerService.create(new Writer("Sergey", "Dovlatov")));
+        doReturn(writer).when(writerService).create("Sergey", "Dovlatov");
+        assertEquals(writer, writerService.create("Sergey", "Dovlatov"));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(writerUpdate).when(writerService).update(new Writer(1L, "Sergey", "Dovlatov"));
-        assertEquals(writerUpdate, writerService.update(new Writer(id, first, last)));
+        doReturn(writer).when(writerService).update(1L, "Sergey", "Dovlatov");
+        assertEquals(writer, writerService.update(id, first, last));
     }
 
     @Test
@@ -72,17 +70,5 @@ public class WriterServiceImplTest {
         doReturn(writerList).when(writerService).getAll();
         assertEquals(writerList, writerService.getAll());
     }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }else if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return false;
-    }
-
 
 }

@@ -18,14 +18,14 @@ public class RegionServiceImpl implements RegionService {
 
 
     @Override
-    public Region create(Region region) {
-        return regionRepository.create(region);
+    public Region create(String regionName, Long writerId) {
+        return regionRepository.create(regionName, writerId);
     }
 
 
     @Override
-    public Region update(Region region) {
-        return regionRepository.update(region);
+    public Region update(Long id, String regionName, Long writerId) {
+        return regionRepository.update(id,regionName,writerId);
     }
 
 

@@ -14,12 +14,12 @@ public class RegionController {
         return regionService.getById(id);
     }
 
-    public Region create(Region region) {
-        return regionService.create(region);
+    public Region create(String regionName, Long writerId) {
+        return regionService.create(regionName, writerId);
     }
 
-    public Region update(Region region) {
-        return regionService.update(region);
+    public Region update(Long id, String regionName, Long writerId) {
+        return regionService.update(id,regionName, writerId);
     }
 
     public void deleteById(Long id) {

@@ -10,25 +10,8 @@ public class Region {
     public Region() {
     }
 
-    public Region(Long id) {
-        this.id = id;
-    }
-
-
     public Region(String regionName) {
         this.regionName = regionName;
-    }
-
-
-    public Region(Long id, String regionName) {
-        this.id = id;
-        this.regionName = regionName;
-    }
-
-
-    public Region(String regionName,Long writerId) {
-        this.regionName = regionName;
-        this.writerId = writerId;
     }
 
 
@@ -70,6 +53,6 @@ public class Region {
     @Override
     public String toString() {
 
-        return "Region: " + "ID: " + id + ", Region name: " + regionName + ", Writer ID: " + writerId;
+        return "  " + id + " |  " + regionName + " | " + writerId;
     }
 }

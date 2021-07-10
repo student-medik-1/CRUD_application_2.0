@@ -23,10 +23,6 @@ public class RegionServiceImplTest {
     private static final String regionName = "Barcelona";
     private static final Long writerId = 3L;
 
-    private static final Region regionCreate = new Region(regionName, writerId);
-    private static final Region regionUpdated = new Region(id, regionName, writerId);
-
-
     @Mock
     private Region region;
 
@@ -52,15 +48,15 @@ public class RegionServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(regionCreate).when(regionService).create(new Region("Barcelona",writerId));
-        assertEquals(regionCreate, regionService.create(new Region("Barcelona", 3L)));
+        doReturn(region).when(regionService).create("Barcelona",writerId);
+        assertEquals(region, regionService.create(regionName, 3L));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(regionUpdated).when(regionService).update(new Region(1L,"Barcelona", 3L));
-        assertEquals(regionUpdated, regionService.update(new Region(1L, "Barcelona", writerId)));
+        doReturn(region).when(regionService).update(id,"Barcelona", 3L);
+        assertEquals(region, regionService.update(1L, "Barcelona", writerId));
     }
 
 

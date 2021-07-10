@@ -23,9 +23,6 @@ public class PostServiceImplTest {
     private static final String content = "content";
     private static final Long writerId = 2L;
 
-    private static final Post postCreate = new Post(content,  2L);
-    private static final Post postUpdated = new Post(id, content,  writerId);
-
     @Mock
     private Post post;
 
@@ -51,15 +48,15 @@ public class PostServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(postCreate).when(postService).create(new Post(content, writerId));
-        assertEquals(postCreate, postService.create(new Post(content,  2L)));
+        doReturn(post).when(postService).create(writerId, content);
+        assertEquals(post, postService.create(2L,content));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(postUpdated).when(postService).update(new Post(1L, content,  2L));
-        assertEquals(postUpdated, postService.update(new Post(1L, content,  writerId)));
+        doReturn(post).when(postService).update(id,   2L, content);
+        assertEquals(post, postService.update(1L, writerId, content ));
     }
 
 

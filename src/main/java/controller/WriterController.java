@@ -15,12 +15,12 @@ public class WriterController {
         return writerService.getById(id);
     }
 
-    public Writer create(Writer writer) {
-        return writerService.create(writer);
+    public Writer create(String firstName, String lastName) {
+        return writerService.create(firstName, lastName);
     }
 
-    public Writer update(Writer writer) {
-        return writerService.update(writer);
+    public Writer update(Long id, String firstName, String lastName) {
+        return writerService.update(id, firstName, lastName);
     }
 
     public void deleteById(Long id) {

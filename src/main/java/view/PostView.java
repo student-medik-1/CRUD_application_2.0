@@ -22,15 +22,20 @@ public class PostView extends AbstractView {
     @Override
     void createNewRecord(String[] command) {
 
-        int content = 1;
-        int writerId = 2;
 
+        int writerId = 1;
+        StringBuilder content = new StringBuilder();
 
         if (command.length > 2) {
 
+            for (int i = 2; i < command.length; i++) {
+                content.append(command[i]).append(" ");
+            }
+
             try {
 
-                Post post = postController.create(new Post(command[content], Long.valueOf(command[writerId])));
+                Post post = postController.create(Long.valueOf(command[writerId]), content.toString());
+                System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
                 System.out.println(post.toString() + "\n");
                 System.out.println("... Создание записи ...");
 
@@ -51,15 +56,20 @@ public class PostView extends AbstractView {
     void editRecord(String[] command) {
 
         int id = 1;
-        int content = 2;
-        int writerId = 3;
+        int writerId = 2;
+        StringBuilder content = new StringBuilder();
 
         if (command.length > 3) {
+            for (int i = 3; i < command.length; i++) {
+                content.append(command[i]).append(" ");
+            }
+
             System.out.println("... Изменение записи ...");
             try {
 
-                Post post =  postController.update(new Post(Long.valueOf(command[id]), command[content],
-                        Long.valueOf(command[writerId])));
+                Post post =  postController.update(Long.valueOf(command[id]),Long.valueOf(command[writerId]),
+                        content.toString());
+                System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
                 System.out.println(post.toString() + "\n");
                 System.out.println("... Изменения внесены ... ");
 
@@ -84,6 +94,7 @@ public class PostView extends AbstractView {
             try {
 
                 Post post = postController.getById(Long.valueOf(command[1]));
+                System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
                 System.out.println(post.toString() + "\n");
 
             } catch (NumberFormatException e) {
@@ -106,11 +117,14 @@ public class PostView extends AbstractView {
         System.out.println("... Получение всех записей ...");
         List<Post> postList = postController.getAll();
 
+
         if (postList.size() > 0) {
+            System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
+
             postList.forEach((r) -> System.out.println(r.toString()));
 
         } else {
-            System.out.println("Список пуст");
+            System.out.println("Список записей пуст");
         }
 
     }
@@ -125,7 +139,6 @@ public class PostView extends AbstractView {
             try {
 
                 postController.deleteById(Long.valueOf(command[1]));
-                System.out.println("... Запись удален ...");
 
             } catch (NumberFormatException e) {
                 System.out.println("Неправильная команда  " + DELETE);
@@ -140,13 +153,12 @@ public class PostView extends AbstractView {
     @Override
     void helpMe() {
 
-        System.out.println("Записи будут выводиться в виде:\n    ID | CREATED | UPDATED | CONTENT \n" +
-                "Список команд для действий \n" +
-                CREATE + " CONTENT WRITER_ID - добавить новую запись \n" +
-                DELETE + " ID - удалить запись по ID \n" +
-                GET_BY_ID + " ID - получить запись по ID \n" +
+        System.out.println("          Список команд для действий: \n\n" +
+                CREATE + "  'ID писателя'  'Текст' - добавить новую запись \n" +
+                GET_BY_ID + " 'ID' - получить запись по ID \n" +
                 GET_ALL + " - получить все записи \n" +
-                EDIT_BY_ID + " ID CONTENT WRITER_ID  - изменить запись по ID \n" +
+                EDIT_BY_ID + " 'ID'  'ID писателя'  'Текст'   - изменить запись по ID \n" +
+                DELETE + " 'ID' - удалить запись по ID \n" +
                 BACK_TO_BEGINNING + " - вернуться в начало программы\n" +
                 EXIT + " - выход из программы");
     }
@@ -172,4 +184,5 @@ public class PostView extends AbstractView {
         }
         return abstractView;
     }
+
 }

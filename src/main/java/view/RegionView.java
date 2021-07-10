@@ -25,7 +25,9 @@ public class RegionView extends AbstractView {
         int writerId = 2;
 
         if (command.length > 2) {
-            Region region = regionController.create(new Region(command[regionName], Long.valueOf(command[writerId])));
+            Region region = regionController.create(command[regionName], Long.valueOf(command[writerId]));
+
+            System.out.println("'ID' | 'Название региона'| 'ID писателя' | \n");
             System.out.println(region.toString() + "\n");
             System.out.println("... Страна добавлена ...");
 
@@ -45,8 +47,9 @@ public class RegionView extends AbstractView {
         if (command.length > 3) {
             System.out.println("... Изменение записи ... \n");
             try {
-                Region region = regionController.update(new Region(Long.valueOf(command[id]), command[regionName],
-                        Long.valueOf(command[writerId])));
+                Region region = regionController.update(Long.valueOf(command[id]), command[regionName],
+                        Long.valueOf(command[writerId]));
+                System.out.println("'ID' | 'Название региона'| 'ID писателя' | \n");
                 System.out.println(region.toString() + "\n");
                 System.out.println("... Страна изменена ...");
 
@@ -73,6 +76,7 @@ public class RegionView extends AbstractView {
             try {
 
                 Region region = regionController.getById(Long.valueOf(command[1]));
+                System.out.println("'ID' | 'Название региона'| 'ID писателя' | \n");
                 System.out.println(region.toString() + "\n");
 
             } catch (NumberFormatException e) {
@@ -96,7 +100,10 @@ public class RegionView extends AbstractView {
 
         List<Region> regionList = regionController.getAll();
 
+
         if (regionList.size() > 0) {
+            System.out.println("'ID' | 'Название региона'| 'ID писателя' \n");
+
             regionList.forEach((r) -> System.out.println((r.toString())));
 
         } else{
@@ -115,7 +122,6 @@ public class RegionView extends AbstractView {
             try {
 
                 regionController.deleteById(Long.valueOf(command[1]));
-                System.out.println("... Страна удалена ... \n");
 
             } catch (NumberFormatException e) {
                 System.out.println("Неправильная команда " + DELETE);
@@ -132,13 +138,12 @@ public class RegionView extends AbstractView {
     @Override
     void helpMe() {
 
-        System.out.println("Записи будут  выводиться в виде: \n     ID | NAME_REGION \n" +
-                "Список команд для действий \n" +
-                CREATE + " NAME_REGION WRITER_ID- добавить новую страну в список\n" +
-                EDIT_BY_ID + " ID NAME_REGION WRITER_ID - изменение существующей страны \n" +
-                GET_BY_ID + " ID - получить название страны по ID \n" +
+        System.out.println("          Список команд для действий: \n\n" +
+                CREATE + " 'название региона' 'ID писателя' - добавить новую страну в список\n" +
+                GET_BY_ID + " 'ID' - получить название страны по ID \n" +
                 GET_ALL + " - получение всех стран из списка \n" +
-                DELETE + " ID - удаление страны \n" +
+                EDIT_BY_ID + " 'ID' 'название региона' 'ID писателя' - изменение существующей страны \n" +
+                DELETE + " 'ID' - удаление страны по ID \n" +
                 BACK_TO_BEGINNING + " - вернуться в начало программы\n" +
                 EXIT + " - выход из программы");
     }

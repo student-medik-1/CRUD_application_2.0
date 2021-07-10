@@ -1,7 +1,6 @@
 package repository.jdbc;
 
 import model.Post;
-import model.Writer;
 import repository.PostRepository;
 
 import java.sql.*;
@@ -12,35 +11,78 @@ import static repository.jdbc.JdbcUtils.*;
 
 public class JdbcPostRepositoryImpl implements PostRepository {
 
-    ResultSet resultSet;
-    PreparedStatement statement;
+    private ResultSet resultSet;
 
 
     @Override
     public Post getById(Long id) {
 
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(POST_GET_BY_ID);
-            statement.setLong(1,id);
+        Post post = new Post();
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
+
+            resultSet = statement.executeQuery(POST_GET_BY_ID + id + " ;");
+
+            if (resultSet.next()) {
+
+                if (resultSet.getObject(3) == null) {
+                    post.setCreated(null);
+                } else {
+                    post.setCreated(resultSet.getTimestamp(3).toLocalDateTime());
+                }
+
+                if (resultSet.getObject(4) == null) {
+                    post.setUpdated(null);
+                } else {
+                    post.setUpdated(resultSet.getTimestamp(4).toLocalDateTime());
+                }
+
+                post = new Post(resultSet.getLong(1), resultSet.getString(2),
+                        post.getCreated(), post.getUpdated(), resultSet.getLong(5));
+            }
+
+            resultSet.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        return post;
+    }
+
+
+    @Override
+    public Post create(Long writer_id, String content) {
 
         Post post = new Post();
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-        try {
-            resultSet = statement.executeQuery();
+            statement.execute("INSERT INTO practic.posts (content, created, writer_id) " +
+                    "VALUES( '" + content + "' , \"" + Timestamp.valueOf(LocalDateTime.now()) +
+                    "\", " + writer_id + ") ;");
 
-            post.setId(resultSet.getLong("id"));
-            post.setContent(resultSet.getString("posts"));
+            resultSet = statement.executeQuery(RESULT_POST_CREATE);
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+            if (resultSet.next()) {
 
-        try {
+                if (resultSet.getObject(3) == null) {
+                    post.setCreated(null);
+                } else {
+                    post.setCreated(resultSet.getTimestamp(3).toLocalDateTime());
+                }
+
+                if (resultSet.getObject(4) == null) {
+                    post.setUpdated(null);
+                } else {
+                    post.setUpdated(resultSet.getTimestamp(4).toLocalDateTime());
+                }
+
+                post = new Post(resultSet.getLong(1), resultSet.getString(2),
+                        post.getCreated(), post.getUpdated(), resultSet.getLong(5));
+            }
+
             resultSet.close();
-            statement.close();
+
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -50,71 +92,41 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
 
     @Override
-    public Post create(Post post) {
+    public Post update(Long id, Long writer_id, String content) {
 
-        Writer writer = new Writer();
+        Post post = new Post();
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(POST_CREATE);
-            statement.setString(1, post.getContent());
-            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setLong(3,writer.getId());
+            if (statement.executeUpdate("UPDATE practic.posts SET content = '" + content + "'," +
+                    "updated = "+"\"" + Timestamp.valueOf(LocalDateTime.now()) + "\" , " +
+                    "writer_id = " + writer_id + "  WHERE id = " + id + " ;") > 0) {
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+                resultSet = statement.executeQuery(RESULT_POST_UPDATE + id + " ;");
 
+                if (resultSet.next()) {
+                    if (resultSet.getObject(3) == null) {
+                        post.setCreated(null);
+                    } else {
+                        post.setCreated(resultSet.getTimestamp(3).toLocalDateTime());
+                    }
 
-        try {
-            resultSet = statement.executeQuery();
+                    if (resultSet.getObject(4) == null) {
+                        post.setUpdated(null);
+                    } else {
+                        post.setUpdated(resultSet.getTimestamp(4).toLocalDateTime());
+                    }
 
-            post.setId(resultSet.getLong("id"));
-            post.setContent(resultSet.getString("posts"));
+                    post = new Post(resultSet.getLong(1), resultSet.getString(2),
+                            post.getCreated(), post.getUpdated(), resultSet.getLong(5));
+                }
 
+                resultSet.close();
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        try {
-            resultSet.close();
-            statement.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return post;
-    }
+            } else {
+                System.out.println("Не возможно изменить не существующую запись");
+            }
 
 
-    @Override
-    public Post update(Post post) {
-
-        Writer writer = new Writer();
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(POST_UPDATE);
-            statement.setString(1, post.getContent());
-            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setLong(3,writer.getId());
-            statement.setLong(4,post.getId());
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        try {
-            resultSet = statement.executeQuery();
-
-            post.setId(resultSet.getLong("id"));
-            post.setContent(resultSet.getString("posts"));
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        try {
-            resultSet.close();
-            statement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -126,16 +138,15 @@ public class JdbcPostRepositoryImpl implements PostRepository {
     @Override
     public void deleteById(Long id) {
 
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(POST_DELETE);
-            statement.setLong(1,id);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-        try {
-            statement.executeQuery();
-            statement.close();
+            if (statement.executeUpdate(POST_DELETE + id + " ;") > 0) {
+
+                System.out.println("... Данные удалены ...");
+            } else {
+                System.out.println("... Такой записи нет ...");
+            }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -147,40 +158,34 @@ public class JdbcPostRepositoryImpl implements PostRepository {
     public List<Post> getAll() {
 
         List<Post> postList = new ArrayList<>();
-
-        Statement statement = null;
-        try {
-            statement = JdbcConnection.getConnection().createStatement();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        try {
-            resultSet = statement.executeQuery(POST_GET_ALL);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
         Post post = new Post();
-        while (true) {
-            try {
-                if (!resultSet.next()) {
-                    break;
+
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
+
+            resultSet = statement.executeQuery(POST_GET_ALL);
+
+            while (resultSet.next()) {
+
+                if (resultSet.getObject(3) == null) {
+                    post.setCreated(null);
+                } else {
+                    post.setCreated(resultSet.getTimestamp(3).toLocalDateTime());
                 }
 
-                post.setId(resultSet.getLong("id"));
-                post.setContent(resultSet.getString("content"));
+                if (resultSet.getObject(4) == null) {
+                    post.setUpdated(null);
+                } else {
+                    post.setUpdated(resultSet.getTimestamp(4).toLocalDateTime());
+                }
 
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                post = new Post(resultSet.getLong(1), resultSet.getString(2),
+                        post.getCreated(), post.getUpdated(), resultSet.getLong(5));
+
+                postList.add(post);
             }
 
-            postList.add(post);
-        }
-
-        try {
             resultSet.close();
-            statement.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

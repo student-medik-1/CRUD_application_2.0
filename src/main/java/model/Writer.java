@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Writer{
+public class Writer {
 
     private Long id;
     private String firstName;
@@ -13,27 +13,8 @@ public class Writer{
     public Writer() {
     }
 
-    public Writer(Long id) {
-        this.id = id;
-    }
 
-    public Writer(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Writer(Long id, String firstName, String lastName) {
-        this(firstName, lastName);
-        this.id = id;
-    }
-
-    public Writer(Long id, String firstName, String lastName, List<Post> posts) {
-        this(firstName, lastName);
-        this.id = id;
-        this.posts = posts;
-    }
-
-    public Writer(Long id, String firstName, String lastName,Region regionName, List<Post> posts) {
+    public Writer(Long id, String firstName, String lastName, Region regionName, List<Post> posts) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -92,7 +73,6 @@ public class Writer{
     }
 
 
-
     @Override
     public String toString() {
 
@@ -101,13 +81,20 @@ public class Writer{
         if (posts != null && posts.size() > 0) {
 
             for (Post post : posts) {
-                postBuilder.append(post).append(" ");
+                postBuilder.append(post.getContent()).append(" ");
             }
         } else {
             postBuilder.append("null");
         }
 
-        return "Writer | "  + id + " | " + firstName +   " | " + lastName +
-                " | " + regionName + " | " + postBuilder.toString();
+        if(regionName != null) {
+            return "  " + id + " | " + firstName + " | " + lastName +
+                    " | " + regionName.getRegionName() + " | " + postBuilder.toString();
+        } else {
+            return "  " + id + " | " + firstName + " | " + lastName +
+                    " | " + "null" + " | " + postBuilder.toString();
+        }
+
+
     }
 }

@@ -35,7 +35,8 @@ public class RunnerView {
                 return RegionView.getInstance();
 
             default:
-                throw new RuntimeException("Недопустимый аргумент для типа экземпляра " + type);
+                System.out.println("Недопустимый аргумент для типа экземпляра " + type);
+                return getView();
         }
     }
 }

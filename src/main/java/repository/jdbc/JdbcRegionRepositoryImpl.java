@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static repository.jdbc.JdbcUtils.*;
 
@@ -15,18 +14,15 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
     private ResultSet resultSet;
 
-
     @Override
     public Region getById(Long id) {
 
         Region region = new Region();
-
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             resultSet = statement.executeQuery(REGION_GET_BY_ID + id + " ;");
 
             if (resultSet.next()) {
-
                 region = new Region(resultSet.getLong(1), resultSet.getString(2),
                         resultSet.getLong(3));
             }
@@ -41,34 +37,23 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
 
     @Override
-    public  Region create(Region region) {
+    public Region create(String regionName, Long writerId) {
 
-        AtomicInteger id  = new AtomicInteger(0);
-
+        Region region = new Region();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             statement.execute("INSERT INTO practic.regions (region_name,writer_id) " +
-                    "VALUES( '" + region.getRegionName() + "' , " + region.getWriterId() + " );",
-                    Statement.RETURN_GENERATED_KEYS);
-
-             resultSet = statement.getGeneratedKeys();
-
-            if (resultSet.next()) {
-                id.set(resultSet.getInt(1));
-            }
+                    "VALUES( '" + regionName + "' , " + writerId + " );");
 
             resultSet = statement.executeQuery(RESULT_REGION_CREATE);
 
-
-
             if (resultSet.next()) {
-
-                region = new Region((long) id.get(), resultSet.getString(2),
+                region = new Region(resultSet.getLong(1), resultSet.getString(2),
                         resultSet.getLong(3));
-
             }
 
             resultSet.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,24 +64,26 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
 
     @Override
-    public Region update(Region region) {
+    public Region update(Long id, String regionName, Long writerId) {
 
+        Region region = new Region();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            statement.execute("UPDATE practic.regions SET region_name = '" + region.getRegionName() +
-                    "', writer_id = " + region.getWriterId() + " WHERE id = " + region.getId() + " ;");
+            if (statement.executeUpdate("UPDATE practic.regions SET region_name = '" + regionName +
+                    "', writer_id = " + writerId + " WHERE id = " + id + " ;") > 0) {
 
+                resultSet = statement.executeQuery(RESULT_REGION_UPDATE + id + " ;");
 
-            resultSet = statement.executeQuery(RESULT_REGION_UPDATE + region.getId() + " ;");
+                if (resultSet.next()) {
+                    region = new Region(resultSet.getLong(1), resultSet.getString(2),
+                            resultSet.getLong(3));
+                }
 
-            if (resultSet.next()) {
+                resultSet.close();
 
-                region = new Region(resultSet.getLong(1), resultSet.getString(2),
-                        resultSet.getLong(3));
-
+            } else {
+                System.out.println("Не возможно изменить не существующую запись");
             }
-
-            resultSet.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,7 +98,12 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            statement.execute(REGION_DELETE + id + " ;");
+            if (statement.executeUpdate(REGION_DELETE + id + " ;") > 0) {
+
+                System.out.println("... Данные удалены ...");
+            } else {
+                System.out.println("... Такой страны нет ...");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,7 +122,6 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
             resultSet = statement.executeQuery(REGION_GET_ALL);
 
             while (resultSet.next()) {
-
                 Region region = new Region(resultSet.getLong(1),
                         resultSet.getString(2), resultSet.getLong(3));
 
