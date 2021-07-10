@@ -4,28 +4,48 @@ public class JdbcUtils {
 
     // for  Writer
 
-    public static final String WRITER_GET_BY_ID = "SELECT a.id,a.first_name,a.last_name, a.region_name,content " +
+    public static final String WRITER_GET_BY_ID = "SELECT writer_id,a.first_name,a.last_name, " +
+            "a.region_name,content " +
             "FROM (SELECT writers.id, first_name, last_name, region_name " +
-            "FROM practic.writers LEFT JOIN practic.regions ON writers.id = regions.writer_id) " +
-            "AS a  " +
-            "LEFT JOIN practic.posts ON a.id = practic.posts.writer_id  WHERE a.id = ?";
+            "FROM practic.writers " +
+            "LEFT JOIN practic.regions " +
+            "ON practic.writers.id = practic.regions.writer_id) AS a  " +
+            "LEFT JOIN practic.posts " +
+            "ON a.id = practic.posts.writer_id  " +
+            "WHERE a.id = ";
 
-    public static final String WRITER_CREATE = "INSERT INTO practic.writers (first_name, last_name) VALUES(?,?);";
-
-    public static final String RESULT_WRITER_CREATE = "SELECT a.id,a.first_name,a.last_name, a.region_name,content " +
+    public static final String RESULT_WRITER_CREATE = "SELECT a.id,a.first_name,a.last_name, " +
+            "a.region_name,content " +
             "FROM (SELECT writers.id, first_name, last_name, region_name " +
-            "FROM practic.writers LEFT JOIN practic.regions ON writers.id = regions.writer_id " +
-            "WHERE writers.id = (SELECT MAX(id) FROM practic.writers)) AS a " +
-            "LEFT JOIN practic.posts ON a.id = practic.posts.writer_id";
-    public static final String WRITER_UPDATE = "UPDATE practic.writers SET first_name = ?, last_name = ? WHERE id = ? ;";
+            "FROM practic.writers " +
+            "LEFT JOIN practic.regions " +
+            "ON writers.id = regions.writer_id " +
+            "WHERE writers.id = (SELECT MAX(id) " +
+            "FROM practic.writers)) AS a " +
+            "LEFT JOIN practic.posts " +
+            "ON a.id = practic.posts.writer_id ";
 
-    public static final String WRITER_GET_ALL = "SELECT a.id,a.first_name,a.last_name, a.region_name,content " +
-            "FROM (SELECT writers.id, first_name, last_name, region_name " +
-            "FROM writers LEFT JOIN regions ON writers.id = regions.writer_id) " +
-            "AS a " +
-            "LEFT JOIN posts ON a.id = posts.writer_id;";
 
-    public static final String WRITER_DELETE = "DELETE FROM writers WHERE id = ? ;";
+    public static final String RESULT_WRITER_UPDATE = "SELECT writer_id,a.first_name,a.last_name, a.region_name,content"
+            + " FROM (SELECT writers.id, first_name, last_name, region_name " +
+            "FROM practic.writers " +
+            "LEFT JOIN practic.regions " +
+            "ON writers.id = regions.writer_id " +
+            "WHERE writers.id = ? " +
+            "FROM practic.writers)) AS a " +
+            "LEFT JOIN posts " +
+            "ON a.id = posts.writer_id" +
+            "WHERE a.id = ";
+
+    public static final String WRITER_GET_ALL = "SELECT writer_id,a.first_name,a.last_name, a.region_name, " +
+            "content   FROM (SELECT writers.id, first_name, last_name, region_name " +
+            "FROM practic.writers " +
+            "LEFT JOIN practic.regions " +
+            "ON practic.writers.id = practic.regions.writer_id) AS a " +
+            "LEFT JOIN practic.posts " +
+            "ON a.id = posts.writer_id;";
+
+    public static final String WRITER_DELETE = "DELETE FROM writers WHERE id = ";
 
 
     // for  Post
@@ -39,10 +59,15 @@ public class JdbcUtils {
 
     // for  Region
 
-    public static final String REGION_GET_BY_ID = "SELECT id, region_name FROM regions WHERE id= ? ;";
-    public static final String REGION_CREATE = "INSERT INTO regions (region_name,writer_id) VALUES(?,?);";
-    public static final String REGION_UPDATE = "UPDATE regions SET region_name = ?,writer_id = ? WHERE id = ? ;";
-    public static final String REGION_GET_ALL = "SELECT id, region_name FROM regions ;";
-    public static final String REGION_DELETE = "DELETE FROM regions WHERE id = ? ;";
+    public static final String REGION_GET_BY_ID = "SELECT * FROM practic.regions WHERE id= ";
+
+    public static final String RESULT_REGION_CREATE = "SELECT region_name, writer_id FROM practic.regions " +
+            "WHERE id =(SELECT MAX(id) FROM practic.regions)";
+
+    public static final String RESULT_REGION_UPDATE = "SELECT * FROM practic.regions  WHERE id = ";
+
+    public static final String REGION_GET_ALL = "SELECT * FROM practic.regions ;";
+
+    public static final String REGION_DELETE = "DELETE FROM practic.regions WHERE id = ";
 
 }

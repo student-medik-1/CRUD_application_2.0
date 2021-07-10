@@ -30,7 +30,7 @@ public class PostView extends AbstractView {
 
             try {
 
-                Post post = postController.create(command[content], Long.valueOf(command[writerId]));
+                Post post = postController.create(new Post(command[content], Long.valueOf(command[writerId])));
                 System.out.println(post.toString() + "\n");
                 System.out.println("... Создание записи ...");
 
@@ -58,8 +58,8 @@ public class PostView extends AbstractView {
             System.out.println("... Изменение записи ...");
             try {
 
-                Post post =  postController.update(Long.valueOf(command[id]), command[content],
-                        Long.valueOf(command[writerId]));
+                Post post =  postController.update(new Post(Long.valueOf(command[id]), command[content],
+                        Long.valueOf(command[writerId])));
                 System.out.println(post.toString() + "\n");
                 System.out.println("... Изменения внесены ... ");
 

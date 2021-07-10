@@ -1,47 +1,37 @@
 package repository.jdbc;
 
 import model.Region;
-import model.Writer;
 import repository.RegionRepository;
 
-
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static repository.jdbc.JdbcUtils.*;
 
 public class JdbcRegionRepositoryImpl implements RegionRepository {
 
     private ResultSet resultSet;
-    private PreparedStatement statement;
 
 
     @Override
     public Region getById(Long id) {
 
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(REGION_GET_BY_ID);
-            statement.setLong(1, id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
         Region region = new Region();
 
-        try {
-            resultSet = statement.executeQuery();
-            region.setId(resultSet.getLong("id"));
-            region.setRegionName(resultSet.getString("region_name"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-        try {
+            resultSet = statement.executeQuery(REGION_GET_BY_ID + id + " ;");
+
+            if (resultSet.next()) {
+
+                region = new Region(resultSet.getLong(1), resultSet.getString(2),
+                        resultSet.getLong(3));
+            }
+
             resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,28 +41,35 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
 
     @Override
-    public Region create(Region region) {
-        Writer writer = new Writer();
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(REGION_CREATE);
-            statement.setString(1, region.getRegionName());
-            statement.setLong(2, writer.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public  Region create(Region region) {
 
-        try {
-            resultSet = statement.executeQuery();
+        AtomicInteger id  = new AtomicInteger(0);
 
-            region.setId(resultSet.getLong("id"));
-            region.setRegionName(resultSet.getString("region_name"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-        try {
+            statement.execute("INSERT INTO practic.regions (region_name,writer_id) " +
+                    "VALUES( '" + region.getRegionName() + "' , " + region.getWriterId() + " );",
+                    Statement.RETURN_GENERATED_KEYS);
+
+             resultSet = statement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                id.set(resultSet.getInt(1));
+            }
+
+            resultSet = statement.executeQuery(RESULT_REGION_CREATE);
+
+
+
+            if (resultSet.next()) {
+
+                region = new Region((long) id.get(), resultSet.getString(2),
+                        resultSet.getLong(3));
+
+            }
+
             resultSet.close();
-            statement.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,29 +80,24 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region update(Region region) {
-        Writer writer = new Writer();
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(REGION_UPDATE);
 
-            statement.setString(1, region.getRegionName());
-            statement.setLong(2, writer.getId());
-            statement.setLong(3, region.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-        try {
-            resultSet = statement.executeQuery();
+            statement.execute("UPDATE practic.regions SET region_name = '" + region.getRegionName() +
+                    "', writer_id = " + region.getWriterId() + " WHERE id = " + region.getId() + " ;");
 
-            region.setId(resultSet.getLong("id"));
-            region.setRegionName(resultSet.getString("region_name"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        try {
+            resultSet = statement.executeQuery(RESULT_REGION_UPDATE + region.getId() + " ;");
+
+            if (resultSet.next()) {
+
+                region = new Region(resultSet.getLong(1), resultSet.getString(2),
+                        resultSet.getLong(3));
+
+            }
+
             resultSet.close();
-            statement.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -117,19 +109,14 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
     @Override
     public void deleteById(Long id) {
 
-        try {
-            statement = JdbcConnection.getConnection().prepareStatement(REGION_DELETE);
-            statement.setLong(1, id);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
+
+            statement.execute(REGION_DELETE + id + " ;");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        try {
-            statement.executeQuery();
-            statement.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
 
@@ -137,33 +124,21 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
     public List<Region> getAll() {
 
         List<Region> regionList = new ArrayList<>();
-        Statement statement = null;
-        try {
-            statement = JdbcConnection.getConnection().createStatement();
+
+        try (Statement statement = JdbcConnection.getConnection().createStatement()) {
+
             resultSet = statement.executeQuery(REGION_GET_ALL);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
 
-        Region region = new Region();
-        while (true) {
-            try {
-                if (!resultSet.next()) {
-                    break;
-                }
+            while (resultSet.next()) {
 
-                region.setId(resultSet.getLong("id"));
-                region.setRegionName(resultSet.getString("region_name"));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                Region region = new Region(resultSet.getLong(1),
+                        resultSet.getString(2), resultSet.getLong(3));
+
+                regionList.add(region);
             }
 
-            regionList.add(region);
-        }
-
-        try {
             resultSet.close();
-            statement.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

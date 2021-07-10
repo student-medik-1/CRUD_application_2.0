@@ -17,17 +17,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post create(String content, Long writer_id) {
-
-        postRepository.create(new Post(content, writer_id));
-        return new Post(content, writer_id);
+    public Post create(Post post) {
+        return postRepository.create(post);
     }
 
     @Override
-    public Post update(Long id, String content,  Long writer_id) {
-
-        postRepository.create(new Post(id, content,  writer_id));
-        return new Post(id, content,  writer_id);
+    public Post update(Post post) {
+        return postRepository.update(post);
     }
 
     @Override

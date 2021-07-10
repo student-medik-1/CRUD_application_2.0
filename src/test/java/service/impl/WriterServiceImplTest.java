@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import service.WriterService;
 
 import java.util.List;
 
@@ -30,8 +32,8 @@ public class WriterServiceImplTest {
     @Mock
     private List<Writer> writerList;
 
-    @Mock
-    private WriterServiceImpl writerService;
+    @Spy
+    private WriterService writerService;
 
 
     @Before
@@ -54,15 +56,15 @@ public class WriterServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(writerCreate).when(writerService).create("Sergey", "Dovlatov");
-        assertEquals(writerCreate, writerService.create("Sergey", "Dovlatov"));
+        doReturn(writerCreate).when(writerService).create(new Writer("Sergey", "Dovlatov"));
+        assertEquals(writerCreate, writerService.create(new Writer("Sergey", "Dovlatov")));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(writerUpdate).when(writerService).update(1L, "Sergey", "Dovlatov");
-        assertEquals(writerUpdate, writerService.update(id, first, last));
+        doReturn(writerUpdate).when(writerService).update(new Writer(1L, "Sergey", "Dovlatov"));
+        assertEquals(writerUpdate, writerService.update(new Writer(id, first, last)));
     }
 
     @Test
@@ -70,5 +72,17 @@ public class WriterServiceImplTest {
         doReturn(writerList).when(writerService).getAll();
         assertEquals(writerList, writerService.getAll());
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }else if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        return false;
+    }
+
 
 }

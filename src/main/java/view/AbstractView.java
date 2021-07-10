@@ -5,9 +5,8 @@ import java.util.Scanner;
 
 public abstract class AbstractView {
 
-    private Scanner scanner;
-    private PrintStream output;
-    //прерывание
+    private final Scanner scanner;
+    private final PrintStream output;
     private  boolean interrupt;
 
 

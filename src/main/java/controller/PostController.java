@@ -14,12 +14,12 @@ public class PostController {
         return postService.getById(id);
     }
 
-    public Post create(String content, Long writerId) {
-        return postService.create(content, writerId);
+    public Post create(Post post) {
+        return postService.create(post);
     }
 
-    public Post update(Long id, String content, Long writerId) {
-        return postService.update(id, content, writerId);
+    public Post update(Post post) {
+        return postService.update(post);
     }
 
     public void deleteById(Long id) {

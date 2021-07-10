@@ -25,7 +25,7 @@ public class RegionView extends AbstractView {
         int writerId = 2;
 
         if (command.length > 2) {
-            Region region = regionController.create(command[regionName], Long.valueOf(command[writerId]));
+            Region region = regionController.create(new Region(command[regionName], Long.valueOf(command[writerId])));
             System.out.println(region.toString() + "\n");
             System.out.println("... Страна добавлена ...");
 
@@ -45,8 +45,8 @@ public class RegionView extends AbstractView {
         if (command.length > 3) {
             System.out.println("... Изменение записи ... \n");
             try {
-                Region region = regionController.update(Long.valueOf(command[id]), command[regionName],
-                        Long.valueOf(command[writerId]));
+                Region region = regionController.update(new Region(Long.valueOf(command[id]), command[regionName],
+                        Long.valueOf(command[writerId])));
                 System.out.println(region.toString() + "\n");
                 System.out.println("... Страна изменена ...");
 
@@ -93,6 +93,7 @@ public class RegionView extends AbstractView {
     void allRecord() {
 
         System.out.println("... Получение всех записей ... \n");
+
         List<Region> regionList = regionController.getAll();
 
         if (regionList.size() > 0) {

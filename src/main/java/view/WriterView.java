@@ -30,8 +30,8 @@ public class WriterView extends AbstractView {
 
         if (command.length > 2) {
 
+            Writer writer = writerController.create(new Writer(command[firstName], command[lastName]));
             try {
-                Writer writer = writerController.create(command[firstName], command[lastName]);
                 System.out.println("Writer | ID | FIRST_NAME | LAST_NAME | REGION | POSTS_ID \n");
                 System.out.println(writer.toString() + "\n");
                 System.out.println("Новый писатель создан!");
@@ -58,8 +58,8 @@ public class WriterView extends AbstractView {
             System.out.println("... Изменение записи писателя ...");
 
             try {
-                Writer writer = writerController.update(Long.valueOf(command[id]), command[firstName],
-                        command[lastName]);
+                Writer writer = writerController.update(new Writer(Long.valueOf(command[id]), command[firstName],
+                        command[lastName]));
                 System.out.println(writer.toString() + "\n");
                 System.out.println("... Изменения внесены ... ");
 
@@ -105,11 +105,9 @@ public class WriterView extends AbstractView {
 
         List<Writer> writers = writerController.getAll();
 
-        if (writers.size() > 0) {
-            writers.forEach((w) -> System.out.println(w.toString() + "\n"));
+        for (int i = 0; i < writers.size(); i++) {
 
-        } else {
-            System.out.println("Данных нет");
+            System.out.println(writers.get(i).toString());
         }
 
     }

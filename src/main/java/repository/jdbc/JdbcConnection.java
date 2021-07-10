@@ -11,9 +11,13 @@ public class JdbcConnection {
 
     private static Connection connection;
 
+    private JdbcConnection() {
+
+    }
 
 
-    public static Connection getConnection() {
+
+    public static synchronized Connection getConnection() {
 
         if (connection == null) {
 
@@ -26,12 +30,28 @@ public class JdbcConnection {
             try {
                  connection = DriverManager.getConnection(DATA_BASE_URL, USER, PASSWORD);
 
+                 connection.createStatement(
+                         ResultSet.TYPE_SCROLL_SENSITIVE,
+                         ResultSet.CONCUR_UPDATABLE
+                 );
+
+
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
         return connection;
+    }
+
+    public static void closeConnection() {
+
+        try {
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
 }

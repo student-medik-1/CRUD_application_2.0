@@ -4,7 +4,7 @@ public class Region {
 
     private Long id;
     private String regionName;
-    private Writer writer;
+    private Long writerId;
 
 
     public Region() {
@@ -28,14 +28,14 @@ public class Region {
 
     public Region(String regionName,Long writerId) {
         this.regionName = regionName;
-        writer = new Writer(writerId);
+        this.writerId = writerId;
     }
 
 
     public Region(Long id, String regionName, Long writerId) {
         this.id = id;
         this.regionName = regionName;
-        writer = new Writer(writerId);
+        this.writerId = writerId;
     }
 
 
@@ -59,13 +59,17 @@ public class Region {
     }
 
 
-    public Writer getWriter() {
-        return writer;
+    public Long getWriterId() {
+        return writerId;
     }
 
-
-    public void setWriter(Writer writer) {
-        this.writer = writer;
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 
+    @Override
+    public String toString() {
+
+        return "Region: " + "ID: " + id + ", Region name: " + regionName + ", Writer ID: " + writerId;
+    }
 }

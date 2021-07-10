@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import service.RegionService;
 
 import java.util.List;
 
@@ -21,8 +23,8 @@ public class RegionServiceImplTest {
     private static final String regionName = "Barcelona";
     private static final Long writerId = 3L;
 
-    private static final Region regionCreate = new Region(regionName);
-    private static final Region regionUpdated = new Region(id, regionName);
+    private static final Region regionCreate = new Region(regionName, writerId);
+    private static final Region regionUpdated = new Region(id, regionName, writerId);
 
 
     @Mock
@@ -31,8 +33,8 @@ public class RegionServiceImplTest {
     @Mock
     private List<Region> regionList;
 
-    @Mock
-    private RegionServiceImpl regionService;
+    @Spy
+    private RegionService regionService;
 
 
     @Before
@@ -50,15 +52,15 @@ public class RegionServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(regionCreate).when(regionService).create("Barcelona",writerId);
-        assertEquals(regionCreate, regionService.create("Barcelona", 3L));
+        doReturn(regionCreate).when(regionService).create(new Region("Barcelona",writerId));
+        assertEquals(regionCreate, regionService.create(new Region("Barcelona", 3L)));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(regionUpdated).when(regionService).update(1L,"Barcelona", 3L);
-        assertEquals(regionUpdated, regionService.update(1L, "Barcelona", writerId));
+        doReturn(regionUpdated).when(regionService).update(new Region(1L,"Barcelona", 3L));
+        assertEquals(regionUpdated, regionService.update(new Region(1L, "Barcelona", writerId)));
     }
 
 

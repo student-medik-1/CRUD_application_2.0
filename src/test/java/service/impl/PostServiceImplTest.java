@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import service.PostService;
 
 import java.util.List;
 
@@ -30,8 +32,8 @@ public class PostServiceImplTest {
     @Mock
     private List<Post> postList;
 
-    @Mock
-    private PostServiceImpl postService;
+    @Spy
+    private PostService postService;
 
 
     @Before
@@ -49,15 +51,15 @@ public class PostServiceImplTest {
 
     @Test
     public void createTest() {
-        doReturn(postCreate).when(postService).create(content, writerId);
-        assertEquals(postCreate, postService.create(content,  2L));
+        doReturn(postCreate).when(postService).create(new Post(content, writerId));
+        assertEquals(postCreate, postService.create(new Post(content,  2L)));
     }
 
 
     @Test
     public void updateTest() {
-        doReturn(postUpdated).when(postService).update(1L, content,  2L);
-        assertEquals(postUpdated, postService.update(1L, content,  writerId));
+        doReturn(postUpdated).when(postService).update(new Post(1L, content,  2L));
+        assertEquals(postUpdated, postService.update(new Post(1L, content,  writerId)));
     }
 
 

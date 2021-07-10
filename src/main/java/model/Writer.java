@@ -23,15 +23,21 @@ public class Writer{
     }
 
     public Writer(Long id, String firstName, String lastName) {
-
         this(firstName, lastName);
         this.id = id;
     }
 
     public Writer(Long id, String firstName, String lastName, List<Post> posts) {
-
         this(firstName, lastName);
         this.id = id;
+        this.posts = posts;
+    }
+
+    public Writer(Long id, String firstName, String lastName,Region regionName, List<Post> posts) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.regionName = regionName;
         this.posts = posts;
     }
 
