@@ -73,7 +73,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
                 postList.add(new Post(resultSet.getString(5)));
                 if (resultSet.getString(4) == null) {
-                    writer.setRegionName(new Region("null"));
+                    writer.setRegionName(new Region("регион не указан"));
                 } else {
                     writer.setRegionName(new Region(resultSet.getString(4)));
                 }
@@ -111,7 +111,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                     postList.add(new Post(resultSet.getString(5)));
 
                     if (resultSet.getString(4) == null) {
-                        writer.setRegionName(new Region("null"));
+                        writer.setRegionName(new Region("регион не указан"));
                     } else {
                         writer.setRegionName(new Region(resultSet.getString(4)));
                     }
@@ -173,6 +173,12 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         List<Writer> writerList = new ArrayList<>();
         List<Post> postList = new ArrayList<>();
+
+
+        // для отслежения повторных ID
+        Set<Long> idSet = new HashSet<>();
+        List<Long> idList = new LinkedList<>();
+
         Writer writer = new Writer();
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
@@ -181,19 +187,43 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             while (resultSet.next()) {
 
-                postList.add(new Post(resultSet.getString(5)));
+                // одноразовый постлист
+                List<Post> posts = new ArrayList<>();
 
                 if (resultSet.getString(4) == null) {
-                    writer.setRegionName(new Region("null"));
+                    writer.setRegionName(new Region("регион не указан"));
                 } else {
                     writer.setRegionName(new Region(resultSet.getString(4)));
                 }
 
-                writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
-                        resultSet.getString(3), writer.getRegionName(), postList);
+                // поиск двух или нескольких постов у одного писателя
+                if (idSet.add(resultSet.getLong(1))) {
+
+                    idList.add(resultSet.getLong(1));
+
+                    postList.add(new Post(resultSet.getString(5)));
+                    posts.add(new Post(resultSet.getString(5)));
+
+                    writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
+                            resultSet.getString(3), writer.getRegionName(), posts);
 
 
-                writerList.add(writer);
+                    writerList.add(writer);
+
+                } else {
+
+                    int indexDuplicateId = idList.indexOf(resultSet.getLong(1));
+
+                    posts.add(postList.get(indexDuplicateId));
+                    posts.add(new Post(resultSet.getString(5)));
+
+                    writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
+                            resultSet.getString(3), writer.getRegionName(), posts);
+
+
+                    writerList.set(indexDuplicateId, writer);
+                }
+
             }
 
             resultSet.close();

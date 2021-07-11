@@ -98,7 +98,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             if (statement.executeUpdate("UPDATE practic.posts SET content = '" + content + "'," +
-                    "updated = "+"\"" + Timestamp.valueOf(LocalDateTime.now()) + "\" , " +
+                    "updated = \"" + Timestamp.valueOf(LocalDateTime.now()) + "\" , " +
                     "writer_id = " + writer_id + "  WHERE id = " + id + " ;") > 0) {
 
                 resultSet = statement.executeQuery(RESULT_POST_UPDATE + id + " ;");

@@ -42,18 +42,20 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
         Region region = new Region();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            statement.execute("INSERT INTO practic.regions (region_name,writer_id) " +
-                    "VALUES( '" + regionName + "' , " + writerId + " );");
+            if (statement.executeUpdate("INSERT INTO practic.regions (region_name,writer_id) " +
+                    "VALUES( '" + regionName + "' , " + writerId + " );") > 0) {
 
-            resultSet = statement.executeQuery(RESULT_REGION_CREATE);
+                resultSet = statement.executeQuery(RESULT_REGION_CREATE);
 
-            if (resultSet.next()) {
-                region = new Region(resultSet.getLong(1), resultSet.getString(2),
-                        resultSet.getLong(3));
+                if (resultSet.next()) {
+                    region = new Region(resultSet.getLong(1), resultSet.getString(2),
+                            resultSet.getLong(3));
+                }
+
+                resultSet.close();
+            } else {
+                System.out.println(" Писатель с таким ID уже существует...");
             }
-
-            resultSet.close();
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,7 +84,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
                 resultSet.close();
 
             } else {
-                System.out.println("Не возможно изменить не существующую запись");
+                System.out.println("Не возможно изменить запись...");
             }
 
         } catch (SQLException e) {

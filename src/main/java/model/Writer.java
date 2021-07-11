@@ -81,19 +81,15 @@ public class Writer {
         if (posts != null && posts.size() > 0) {
 
             for (Post post : posts) {
-                postBuilder.append(post.getContent()).append(" ");
+                postBuilder.append(post.getContent()).append(" | ");
             }
         } else {
-            postBuilder.append("null");
+            postBuilder.append("нет записей");
         }
 
-        if(regionName != null) {
-            return "  " + id + " | " + firstName + " | " + lastName +
-                    " | " + regionName.getRegionName() + " | " + postBuilder.toString();
-        } else {
-            return "  " + id + " | " + firstName + " | " + lastName +
-                    " | " + "null" + " | " + postBuilder.toString();
-        }
+
+        return "  " + id + " | " + firstName + " | " + lastName +
+                " | " + regionName.getRegionName() + " | " + postBuilder.toString();
 
 
     }
