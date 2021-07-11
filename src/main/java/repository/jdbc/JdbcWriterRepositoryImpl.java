@@ -20,7 +20,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer getById(Long id) {
 
         Writer writer = new Writer();
-        List <Post> postList = new ArrayList<>();
+        List<Post> postList = new ArrayList<>();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             resultSet = statement.executeQuery(WRITER_GET_BY_ID + id + " ;");
@@ -54,7 +54,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer create(String firstName, String lastName) {
 
         Writer writer = new Writer();
-        List <Post> postList = new ArrayList<>();
+        List<Post> postList = new ArrayList<>();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             statement.execute("INSERT INTO practic.writers (first_name, last_name) " +
@@ -98,7 +98,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer update(Long id, String firstName, String lastName) {
 
         Writer writer = new Writer();
-        List <Post> postList = new ArrayList<>();
+        List<Post> postList = new ArrayList<>();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             if (statement.executeUpdate("UPDATE practic.writers SET first_name = '" + firstName +
@@ -142,6 +142,20 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             if (statement.executeUpdate(WRITER_DELETE + id + ";") > 0) {
 
+                if (statement.executeUpdate(DELETE_WRITER_ID_IN_POST + id + " ;") > 0) {
+                    System.out.println("... ID  писателя в папке пост удален ...");
+
+                    if (statement.executeUpdate(DELETE_WRITER_ID_IN_REGION + id + " ;") > 0) {
+                        System.out.println("... ID  писателя в папке регион удален ...");
+
+                    } else {
+                        System.out.println("... ID  писателя в папке регион не существует ...");
+                    }
+
+                } else {
+                    System.out.println("... ID  писателя в папке пост не существует ...");
+                }
+
                 System.out.println("... Данные удалены ...");
             } else {
                 System.out.println("... Такого писателя нет ...");
@@ -158,7 +172,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public List<Writer> getAll() {
 
         List<Writer> writerList = new ArrayList<>();
-        List <Post> postList = new ArrayList<>();
+        List<Post> postList = new ArrayList<>();
         Writer writer = new Writer();
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {

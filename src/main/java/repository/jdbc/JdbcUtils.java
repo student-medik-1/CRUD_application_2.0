@@ -4,9 +4,9 @@ public class JdbcUtils {
 
     // for  Writer
 
-    public static final String WRITER_GET_BY_ID = "SELECT writer_id,a.first_name,a.last_name, " +
+    public static final String WRITER_GET_BY_ID = "SELECT DISTINCT writer_id,a.first_name,a.last_name, " +
             "a.region_name,content " +
-            "FROM (SELECT writers.id, first_name, last_name, region_name " +
+            "FROM (SELECT DISTINCT writers.id, first_name, last_name, region_name " +
                   "FROM practic.writers " +
                       "LEFT JOIN practic.regions " +
                           "ON practic.writers.id = practic.regions.writer_id) AS a  " +
@@ -14,9 +14,9 @@ public class JdbcUtils {
                 "ON a.id = practic.posts.writer_id  " +
             "WHERE a.id = ";
 
-    public static final String RESULT_WRITER_CREATE = "SELECT writer_id,a.first_name,a.last_name, " +
+    public static final String RESULT_WRITER_CREATE = "SELECT DISTINCT writer_id,a.first_name,a.last_name, " +
             "a.region_name,content " +
-            "FROM (SELECT writers.id, first_name, last_name, region_name " +
+            "FROM (SELECT DISTINCT writers.id, first_name, last_name, region_name " +
                   "FROM practic.writers " +
                      "LEFT JOIN practic.regions " +
                         "ON writers.id = regions.writer_id " +
@@ -26,8 +26,9 @@ public class JdbcUtils {
                  "ON a.id = practic.posts.writer_id ;";
 
 
-    public static final String RESULT_WRITER_UPDATE = "SELECT writer_id,a.first_name,a.last_name, a.region_name," +
-            "content FROM (SELECT writers.id, first_name, last_name, region_name " +
+    public static final String RESULT_WRITER_UPDATE = "SELECT DISTINCT writer_id,a.first_name,a.last_name, " +
+            "a.region_name,content " +
+            "FROM (SELECT DISTINCT writers.id, first_name, last_name, region_name " +
                           "FROM practic.writers " +
                             "LEFT JOIN practic.regions " +
                                "ON practic.writers.id = practic.regions.writer_id ) AS a " +
@@ -35,8 +36,8 @@ public class JdbcUtils {
                 "ON a.id = practic.posts.writer_id " +
               "WHERE a.id = ";
 
-    public static final String WRITER_GET_ALL = "SELECT writer_id,a.first_name,a.last_name, a.region_name, " +
-            "content   FROM (SELECT writers.id, first_name, last_name, region_name " +
+    public static final String WRITER_GET_ALL = "SELECT DISTINCT writer_id,a.first_name,a.last_name, a.region_name, " +
+            "content   FROM (SELECT DISTINCT writers.id, first_name, last_name, region_name " +
                             "FROM practic.writers " +
                                "LEFT JOIN practic.regions " +
                                   "ON practic.writers.id = practic.regions.writer_id) AS a " +
@@ -46,6 +47,14 @@ public class JdbcUtils {
     public static final String WRITER_DELETE = "DELETE " +
                                                "FROM practic.writers " +
                                                "WHERE id = ";
+
+    public static final String DELETE_WRITER_ID_IN_POST = "DELETE " +
+                                                          "FROM practic.posts " +
+                                                          "WHERE writer_id = ";
+
+    public static final String DELETE_WRITER_ID_IN_REGION = "DELETE " +
+                                                            "FROM practic.regions " +
+                                                            "WHERE writer_id = ";
 
 
     // for  Post

@@ -47,6 +47,13 @@ public class PostServiceImplTest {
 
 
     @Test
+    public void getByIdTest() {
+        doReturn(post).when(postService).getById(id);
+        assertEquals(post, postService.getById(1L));
+    }
+
+
+    @Test
     public void createTest() {
         doReturn(post).when(postService).create(writerId, content);
         assertEquals(post, postService.create(2L,content));

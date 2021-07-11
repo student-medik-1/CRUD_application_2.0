@@ -53,6 +53,13 @@ public class WriterServiceImplTest {
 
 
     @Test
+    public void getByIdTest() {
+        doReturn(writer).when(writerService).getById(id);
+        assertEquals(writer, writerService.getById(1L));
+    }
+
+
+    @Test
     public void createTest() {
         doReturn(writer).when(writerService).create("Sergey", "Dovlatov");
         assertEquals(writer, writerService.create("Sergey", "Dovlatov"));

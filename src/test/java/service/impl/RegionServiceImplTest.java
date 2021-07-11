@@ -47,6 +47,13 @@ public class RegionServiceImplTest {
 
 
     @Test
+    public void getByIdTest() {
+        doReturn(region).when(regionService).getById(id);
+        assertEquals(region, regionService.getById(1L));
+    }
+
+
+    @Test
     public void createTest() {
         doReturn(region).when(regionService).create("Barcelona",writerId);
         assertEquals(region, regionService.create(regionName, 3L));
