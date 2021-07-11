@@ -21,23 +21,30 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         Writer writer = new Writer();
         List<Post> postList = new ArrayList<>();
+
+
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
+
+            resultSet = statement.executeQuery(WRITER_GET_BY_ID_FOR_POSTS + id + " ;");
+
+            while (resultSet.next()) {
+                postList.add(new Post(resultSet.getString(1)));
+            }
 
             resultSet = statement.executeQuery(WRITER_GET_BY_ID + id + " ;");
 
+
             if (resultSet.next()) {
-                postList.add(new Post(resultSet.getString(5)));
 
                 if (resultSet.getString(4) == null) {
-                    writer.setRegionName(new Region("null"));
+                    writer.setRegionName(new Region("регион не указан"));
+
                 } else {
                     writer.setRegionName(new Region(resultSet.getString(4)));
                 }
 
-
                 writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
-                        resultSet.getString(3), writer.getRegionName(),
-                        postList);
+                        resultSet.getString(3), writer.getRegionName(), postList);
             }
 
             resultSet.close();
@@ -55,36 +62,41 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         Writer writer = new Writer();
         List<Post> postList = new ArrayList<>();
+
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             statement.execute("INSERT INTO practic.writers (first_name, last_name) " +
-                    "VALUES('" + firstName + "' , '" + lastName + "');");
+                    "VALUES('" + firstName + "' , '" + lastName + "') ;");
 
             statement.execute("INSERT INTO practic.regions (writer_id) " +
-                    "VALUES((SELECT MAX(id) FROM practic.writers)); ");
+                    "VALUES((SELECT MAX(id) FROM practic.writers)) ;");
 
             statement.execute("INSERT INTO practic.posts (created, writer_id) " +
                     "VALUES( \"" + Timestamp.valueOf(LocalDateTime.now()) + "\" ," +
-                    "(SELECT MAX(id) FROM practic.writers)); ");
+                    "(SELECT MAX(id) FROM practic.writers)) ;");
+
+            resultSet = statement.executeQuery(WRITER_CREATE_FOR_POSTS);
+
+            while (resultSet.next()) {
+                postList.add(new Post(resultSet.getString(1)));
+            }
 
             resultSet = statement.executeQuery(RESULT_WRITER_CREATE);
 
             if (resultSet.next()) {
 
-                postList.add(new Post(resultSet.getString(5)));
                 if (resultSet.getString(4) == null) {
                     writer.setRegionName(new Region("регион не указан"));
+
                 } else {
                     writer.setRegionName(new Region(resultSet.getString(4)));
                 }
-
 
                 writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
                         resultSet.getString(3), writer.getRegionName(), postList);
             }
 
             resultSet.close();
-
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -99,23 +111,28 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         Writer writer = new Writer();
         List<Post> postList = new ArrayList<>();
+
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             if (statement.executeUpdate("UPDATE practic.writers SET first_name = '" + firstName +
                     "' , last_name = '" + lastName + "'  WHERE id = " + id + " ;") > 0) {
 
-                resultSet = statement.executeQuery(RESULT_WRITER_UPDATE + id);
+                resultSet = statement.executeQuery(WRITER_UPDATE_FOR_POSTS + id + " ;");
+
+                while (resultSet.next()) {
+                    postList.add(new Post(resultSet.getString(1)));
+                }
+
+                resultSet = statement.executeQuery(RESULT_WRITER_UPDATE + id + " ;");
 
                 if (resultSet.next()) {
 
-                    postList.add(new Post(resultSet.getString(5)));
-
                     if (resultSet.getString(4) == null) {
                         writer.setRegionName(new Region("регион не указан"));
+
                     } else {
                         writer.setRegionName(new Region(resultSet.getString(4)));
                     }
-
 
                     writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
                             resultSet.getString(3), writer.getRegionName(), postList);
@@ -140,7 +157,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            if (statement.executeUpdate(WRITER_DELETE + id + ";") > 0) {
+            if (statement.executeUpdate(WRITER_DELETE + id + " ;") > 0) {
 
                 if (statement.executeUpdate(DELETE_WRITER_ID_IN_POST + id + " ;") > 0) {
                     System.out.println("... ID  писателя в папке пост удален ...");
@@ -164,7 +181,6 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
     }
 
 
@@ -179,13 +195,14 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         Set<Long> idSet = new HashSet<>();
         List<Long> idList = new LinkedList<>();
 
-        Writer writer = new Writer();
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
             resultSet = statement.executeQuery(WRITER_GET_ALL);
 
             while (resultSet.next()) {
+
+                Writer writer = new Writer();
 
                 // одноразовый постлист
                 List<Post> posts = new ArrayList<>();
@@ -200,13 +217,11 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 if (idSet.add(resultSet.getLong(1))) {
 
                     idList.add(resultSet.getLong(1));
-
                     postList.add(new Post(resultSet.getString(5)));
                     posts.add(new Post(resultSet.getString(5)));
 
                     writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
                             resultSet.getString(3), writer.getRegionName(), posts);
-
 
                     writerList.add(writer);
 
@@ -220,10 +235,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                     writer = new Writer(resultSet.getLong(1), resultSet.getString(2),
                             resultSet.getString(3), writer.getRegionName(), posts);
 
-
                     writerList.set(indexDuplicateId, writer);
                 }
-
             }
 
             resultSet.close();
@@ -234,5 +247,4 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         return writerList;
     }
-
 }

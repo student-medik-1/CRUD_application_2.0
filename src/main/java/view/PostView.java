@@ -36,6 +36,7 @@ public class PostView extends AbstractView {
 
                 Post post = postController.create(Long.valueOf(command[writerId]), content.toString());
                 System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
+
                 System.out.println(post.toString() + "\n");
                 System.out.println("... Создание записи ...");
 
@@ -70,6 +71,7 @@ public class PostView extends AbstractView {
                 Post post =  postController.update(Long.valueOf(command[id]),Long.valueOf(command[writerId]),
                         content.toString());
                 System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
+
                 System.out.println(post.toString() + "\n");
                 System.out.println("... Изменения внесены ... ");
 
@@ -95,6 +97,7 @@ public class PostView extends AbstractView {
 
                 Post post = postController.getById(Long.valueOf(command[1]));
                 System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
+
                 System.out.println(post.toString() + "\n");
 
             } catch (NumberFormatException e) {

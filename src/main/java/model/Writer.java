@@ -78,13 +78,12 @@ public class Writer {
 
         StringBuilder postBuilder = new StringBuilder();
 
-        if (posts != null && posts.size() > 0) {
-
+        if (posts == null ) {
+            postBuilder.append("нет записей");
+        } else {
             for (Post post : posts) {
                 postBuilder.append(post.getContent()).append(" | ");
             }
-        } else {
-            postBuilder.append("нет записей");
         }
 
 

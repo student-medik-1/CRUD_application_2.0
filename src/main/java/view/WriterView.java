@@ -30,7 +30,7 @@ public class WriterView extends AbstractView {
 
             Writer writer = writerController.create(command[firstName], command[lastName]);
             try {
-                System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Записи   |\n");
+                System.out.println(" ID |  Имя  |  Фамилия  |   Страна  |   Записи   |\n");
                 System.out.println(writer.toString() + "\n");
                 System.out.println("Новый писатель создан!");
 
@@ -58,7 +58,7 @@ public class WriterView extends AbstractView {
             try {
                 Writer writer = writerController.update(Long.valueOf(command[id]), command[firstName],
                         command[lastName]);
-                System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Записи   |\n");
+                System.out.println(" ID |  Имя  |  Фамилия  |   Страна  |   Записи   |\n");
                 System.out.println(writer.toString() + "\n");
                 System.out.println("... Изменения внесены ... ");
 
@@ -82,7 +82,7 @@ public class WriterView extends AbstractView {
 
             try {
                 Writer writer = writerController.getById(Long.valueOf(command[1]));
-                System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Записи   |\n");
+                System.out.println(" ID |  Имя  |  Фамилия  |   Страна  |   Записи   |\n");
                 System.out.println(writer.toString() + "\n");
 
             } catch (NumberFormatException e) {
@@ -106,7 +106,7 @@ public class WriterView extends AbstractView {
         List<Writer> writerList = writerController.getAll();
 
         if (writerList.size() > 0) {
-            System.out.println(" ID |    Имя    |    Фамилия    |     Страна    |   Записи   |\n");
+            System.out.println(" ID |  Имя  |  Фамилия  |   Страна  |   Записи   |\n");
 
             writerList.forEach((w) -> System.out.println((w.toString())));
 
