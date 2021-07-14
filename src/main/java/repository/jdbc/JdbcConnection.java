@@ -11,12 +11,6 @@ public class JdbcConnection {
 
     private static Connection connection;
 
-    private JdbcConnection() {
-
-    }
-
-
-
     public static synchronized Connection getConnection() {
 
         if (connection == null) {
@@ -35,23 +29,12 @@ public class JdbcConnection {
                          ResultSet.CONCUR_UPDATABLE
                  );
 
-
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
         return connection;
-    }
-
-    public static void closeConnection() {
-
-        try {
-            connection.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
 }

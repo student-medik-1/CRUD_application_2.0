@@ -26,7 +26,7 @@ public class WriterView extends AbstractView {
         int firstName = 1;
         int lastName = 2;
 
-        if (command.length > 2) {
+        if (command.length == 3) {
 
             Writer writer = writerController.create(command[firstName], command[lastName]);
             try {
@@ -37,6 +37,10 @@ public class WriterView extends AbstractView {
             } catch (NumberFormatException e) {
                 System.out.println("Неверная команда создания " + CREATE);
             }
+        } else if (command.length > 3) {
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + CREATE);
         }
@@ -51,7 +55,7 @@ public class WriterView extends AbstractView {
         int firstName = 2;
         int lastName = 3;
 
-        if (command.length > 3) {
+        if (command.length == 4) {
 
             System.out.println("... Изменение записи писателя ...");
 
@@ -67,6 +71,10 @@ public class WriterView extends AbstractView {
             } catch (NoSuchElementException e) {
                 System.out.println("Такой записи нет");
             }
+        } else if (command.length > 4){
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + EDIT_BY_ID);
         }
@@ -77,7 +85,7 @@ public class WriterView extends AbstractView {
     @Override
     void getById(String[] command) {
 
-        if (command.length > 1) {
+        if (command.length == 2) {
             System.out.println("... Вывод данных про писателя ...");
 
             try {
@@ -92,6 +100,10 @@ public class WriterView extends AbstractView {
                 System.out.println("Писателя с таким ID нет ");
             }
 
+        } else if (command.length > 2) {
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + GET_BY_ID);
         }
@@ -99,19 +111,23 @@ public class WriterView extends AbstractView {
 
 
     @Override
-    void allRecord() {
+    void allRecord(String[] command) {
 
-        System.out.println("... Получение всех данных ...");
+        if (command.length == 1) {
+            System.out.println("... Получение всех данных ...");
 
-        List<Writer> writerList = writerController.getAll();
+            List<Writer> writerList = writerController.getAll();
 
-        if (writerList.size() > 0) {
-            System.out.println(" ID |  Имя  |  Фамилия  |   Страна  |   Записи   |\n");
+            if (writerList.size() > 0) {
+                System.out.println(" ID |  Имя  |  Фамилия  |   Страна  |   Записи   |\n");
 
-            writerList.forEach((w) -> System.out.println((w.toString())));
+                writerList.forEach((w) -> System.out.println((w.toString())));
 
-        } else{
-            System.out.println("Список писателей пуст");
+            } else{
+                System.out.println("Список писателей пуст");
+            }
+        } else {
+            System.out.println("Вы ввели больше данных чем нужно");
         }
 
     }
@@ -120,7 +136,7 @@ public class WriterView extends AbstractView {
     @Override
     void deleteRecord(String[] command) {
 
-        if (command.length > 1) {
+        if (command.length == 2) {
             System.out.println("... Удаление данных писателя ...");
 
             try {
@@ -132,6 +148,10 @@ public class WriterView extends AbstractView {
             } catch (NoSuchElementException e) {
                 System.out.println("Такого писателя нет(неправильный ID)");
             }
+
+        } else if (command.length > 2) {
+
+            System.out.println("Вы ввели больше данных чем нужно");
 
         } else {
             System.out.println("Не написано комманда " + DELETE);
@@ -152,6 +172,7 @@ public class WriterView extends AbstractView {
                 BACK_TO_BEGINNING + " - вернуться в начало программы\n" +
                 EXIT + " - выход из программы");
     }
+
 
     @Override
     void backToBeginning() {

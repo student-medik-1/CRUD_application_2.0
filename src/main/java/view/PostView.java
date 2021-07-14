@@ -90,7 +90,7 @@ public class PostView extends AbstractView {
     @Override
     void getById(String[] command) {
 
-        if (command.length > 1) {
+        if (command.length == 2) {
             System.out.println("... Получаем записи(посты) ... ");
 
             try {
@@ -108,6 +108,10 @@ public class PostView extends AbstractView {
 
             }
 
+        } else if (command.length > 2) {
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + GET_BY_ID);
 
@@ -115,28 +119,31 @@ public class PostView extends AbstractView {
     }
 
     @Override
-    void allRecord() {
+    void allRecord(String[] command)  {
 
-        System.out.println("... Получение всех записей ...");
-        List<Post> postList = postController.getAll();
+        if (command.length == 1) {
+            System.out.println("... Получение всех записей ...");
+            List<Post> postList = postController.getAll();
 
+            if (postList.size() > 0) {
+                System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
 
-        if (postList.size() > 0) {
-            System.out.println(" ID | ID писателя | Время создания | Время изменения |  Текст  | \n");
+                postList.forEach((r) -> System.out.println(r.toString()));
 
-            postList.forEach((r) -> System.out.println(r.toString()));
+            } else {
+                System.out.println("Список записей пуст");
+            }
 
         } else {
-            System.out.println("Список записей пуст");
+            System.out.println("Вы ввели больше данных чем нужно");
         }
-
     }
 
 
     @Override
     void deleteRecord(String[] command) {
 
-        if (command.length > 1) {
+        if (command.length == 2) {
             System.out.println("... Удаление записи  ...");
 
             try {
@@ -148,10 +155,15 @@ public class PostView extends AbstractView {
             } catch (NoSuchElementException e) {
                 System.out.println("Такой записи нет");
             }
+        } else if (command.length > 2) {
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения  " + DELETE);
         }
     }
+
 
     @Override
     void helpMe() {
@@ -165,6 +177,7 @@ public class PostView extends AbstractView {
                 BACK_TO_BEGINNING + " - вернуться в начало программы\n" +
                 EXIT + " - выход из программы");
     }
+
 
     @Override
     void exit() {
@@ -187,5 +200,4 @@ public class PostView extends AbstractView {
         }
         return abstractView;
     }
-
 }

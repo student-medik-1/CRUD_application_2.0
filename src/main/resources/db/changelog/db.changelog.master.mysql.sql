@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 
 -- changeset Yhtyyar:1
-CREATE TABLE IF NOT EXISTS practic.writers
+CREATE TABLE IF NOT EXISTS practice.writers
 (
     id         BIGINT AUTO_INCREMENT,
     first_name VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS practic.writers
 );
 
 
-CREATE TABLE IF NOT EXISTS practic.regions
+CREATE TABLE IF NOT EXISTS practice.regions
 (
     id          BIGINT AUTO_INCREMENT,
     region_name VARCHAR(100) DEFAULT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS practic.regions
 );
 
 
-CREATE TABLE IF NOT EXISTS practic.posts
+CREATE TABLE IF NOT EXISTS practice.posts
 (
     id        BIGINT AUTO_INCREMENT,
     content   TEXT DEFAULT NULL,

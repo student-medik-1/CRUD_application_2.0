@@ -42,7 +42,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
         Region region = new Region();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            if (statement.executeUpdate("INSERT INTO practic.regions (region_name,writer_id) " +
+            if (statement.executeUpdate("INSERT INTO practice.regions (region_name,writer_id) " +
                     "VALUES( '" + regionName + "' , " + writerId + " );") > 0) {
 
                 resultSet = statement.executeQuery(RESULT_REGION_CREATE);
@@ -71,7 +71,7 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
         Region region = new Region();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            if (statement.executeUpdate("UPDATE practic.regions SET region_name = '" + regionName +
+            if (statement.executeUpdate("UPDATE practice.regions SET region_name = '" + regionName +
                     "', writer_id = " + writerId + " WHERE id = " + id + " ;") > 0) {
 
                 resultSet = statement.executeQuery(RESULT_REGION_UPDATE + id + " ;");
@@ -132,8 +132,8 @@ public class JdbcRegionRepositoryImpl implements RegionRepository {
 
             resultSet.close();
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return regionList;

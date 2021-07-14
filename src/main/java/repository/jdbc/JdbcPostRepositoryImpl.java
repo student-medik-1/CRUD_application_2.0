@@ -56,7 +56,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         Post post = new Post();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            statement.execute("INSERT INTO practic.posts (content, created, writer_id) " +
+            statement.execute("INSERT INTO practice.posts (content, created, writer_id) " +
                     "VALUES( '" + content + "' , \"" + Timestamp.valueOf(LocalDateTime.now()) +
                     "\", " + writer_id + ") ;");
 
@@ -83,8 +83,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             resultSet.close();
 
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return post;
@@ -97,7 +97,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         Post post = new Post();
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            if (statement.executeUpdate("UPDATE practic.posts SET content = '" + content + "'," +
+            if (statement.executeUpdate("UPDATE practice.posts SET content = '" + content + "'," +
                     "updated = \"" + Timestamp.valueOf(LocalDateTime.now()) + "\" , " +
                     "writer_id = " + writer_id + "  WHERE id = " + id + " ;") > 0) {
 
@@ -127,8 +127,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             }
 
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return post;
@@ -147,8 +147,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 System.out.println("... Такой записи нет ...");
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
@@ -186,8 +186,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             resultSet.close();
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return postList;

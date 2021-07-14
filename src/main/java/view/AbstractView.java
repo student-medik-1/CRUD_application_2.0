@@ -7,7 +7,7 @@ public abstract class AbstractView {
 
     private final Scanner scanner;
     private final PrintStream output;
-    private  boolean interrupt;
+    private boolean interrupt;
 
 
     final String CREATE = "new";
@@ -20,7 +20,7 @@ public abstract class AbstractView {
     final String EXIT = "exit";
     final String REPOSITORY_NAME;
 
-    AbstractView (Scanner input, PrintStream output, String repositoryName) {
+    AbstractView(Scanner input, PrintStream output, String repositoryName) {
         this.scanner = input;
         this.output = output;
         this.REPOSITORY_NAME = repositoryName;
@@ -28,13 +28,13 @@ public abstract class AbstractView {
 
     public void start() {
 
-        output.print( REPOSITORY_NAME + ". \nНапишите: " + HELP_ME + "  - для получения помощи(справки) \n          " +
+        output.print(REPOSITORY_NAME + ". \nНапишите: " + HELP_ME + "  - для получения помощи(справки) \n          " +
                 EXIT + "  - для выхода из программы \n");
 
         while (!interrupt) {
             String cmd = scanner.nextLine();
 
-            String [] command = cmd.split(" ");
+            String[] command = cmd.split(" ");
 
             switch (command[0]) {
                 case HELP_ME:
@@ -58,7 +58,7 @@ public abstract class AbstractView {
                     break;
 
                 case GET_ALL:
-                    allRecord();
+                    allRecord(command);
                     break;
 
                 case BACK_TO_BEGINNING:
@@ -71,14 +71,14 @@ public abstract class AbstractView {
 
                 default:
                     System.out.println("Вы ввели неизвестный запрос! Напишите " + HELP_ME +
-                                                                 " для получения помощи(справки)");
+                            " для получения помощи(справки)");
                     break;
             }
         }
     }
 
 
-    abstract void createNewRecord(String [] command);
+    abstract void createNewRecord(String[] command);
 
     abstract void editRecord(String[] command);
 
@@ -86,7 +86,7 @@ public abstract class AbstractView {
 
     abstract void getById(String[] command);
 
-    abstract void allRecord();
+    abstract void allRecord(String[] command);
 
     abstract void helpMe();
 

@@ -24,12 +24,16 @@ public class RegionView extends AbstractView {
         int regionName = 1;
         int writerId = 2;
 
-        if (command.length > 2) {
+        if (command.length == 3) {
             Region region = regionController.create(command[regionName], Long.valueOf(command[writerId]));
 
             System.out.println("'ID' | 'Название региона'| 'ID писателя' | \n");
             System.out.println(region.toString() + "\n");
             System.out.println("... Страна добавлена ...");
+
+        } else if (command.length > 3){
+
+            System.out.println("Вы ввели больше данных чем нужно");
 
         } else {
             System.out.println("Нет необходимых данных для добавления " + CREATE);
@@ -44,7 +48,7 @@ public class RegionView extends AbstractView {
         int regionName = 2;
         int writerId = 3;
 
-        if (command.length > 3) {
+        if (command.length == 4) {
             System.out.println("... Изменение записи ... \n");
             try {
                 Region region = regionController.update(Long.valueOf(command[id]), command[regionName],
@@ -60,6 +64,10 @@ public class RegionView extends AbstractView {
                 System.out.println("В списке нет такой страны ");
 
             }
+        } else if (command.length > 4){
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + EDIT_BY_ID);
         }
@@ -70,7 +78,7 @@ public class RegionView extends AbstractView {
     @Override
     void getById(String[] command) {
 
-        if (command.length > 1) {
+        if (command.length == 2) {
             System.out.println("... Получение записи ...\n");
 
             try {
@@ -86,6 +94,10 @@ public class RegionView extends AbstractView {
                 System.out.println("Страны с таким ID нет");
 
             }
+        } else if (command.length > 2){
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + GET_BY_ID);
         }
@@ -94,21 +106,25 @@ public class RegionView extends AbstractView {
 
 
     @Override
-    void allRecord() {
+    void allRecord(String[] command) {
 
-        System.out.println("... Получение всех записей ... \n");
+        if (command.length == 1) {
+            System.out.println("... Получение всех записей ... \n");
 
-        List<Region> regionList = regionController.getAll();
+            List<Region> regionList = regionController.getAll();
 
+            if (regionList.size() > 0) {
+                System.out.println("'ID' | 'Название региона'| 'ID писателя' \n");
 
-        if (regionList.size() > 0) {
-            System.out.println("'ID' | 'Название региона'| 'ID писателя' \n");
+                regionList.forEach((r) -> System.out.println((r.toString())));
 
-            regionList.forEach((r) -> System.out.println((r.toString())));
-
-        } else{
-            System.out.println("Список стран пуст");
+            } else {
+                System.out.println("Список стран пуст");
+            }
+        } else {
+            System.out.println("Вы ввели больше данных чем нужно");
         }
+
 
     }
 
@@ -116,7 +132,7 @@ public class RegionView extends AbstractView {
     @Override
     void deleteRecord(String[] command) {
 
-        if (command.length > 1) {
+        if (command.length == 2) {
             System.out.println("... Удаление страны из списка ... \n");
 
             try {
@@ -129,6 +145,10 @@ public class RegionView extends AbstractView {
             } catch (NoSuchElementException e) {
                 System.out.println("В списке нет такой страны ");
             }
+        } else if (command.length > 2){
+
+            System.out.println("Вы ввели больше данных чем нужно");
+
         } else {
             System.out.println("Нет необходимых данных для выполнения " + DELETE);
         }

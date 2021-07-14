@@ -49,8 +49,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             resultSet.close();
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return writer;
@@ -65,15 +65,15 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            statement.execute("INSERT INTO practic.writers (first_name, last_name) " +
+            statement.execute("INSERT INTO practice.writers (first_name, last_name) " +
                     "VALUES('" + firstName + "' , '" + lastName + "') ;");
 
-            statement.execute("INSERT INTO practic.regions (writer_id) " +
-                    "VALUES((SELECT MAX(id) FROM practic.writers)) ;");
+            statement.execute("INSERT INTO practice.regions (writer_id) " +
+                    "VALUES((SELECT MAX(id) FROM practice.writers)) ;");
 
-            statement.execute("INSERT INTO practic.posts (created, writer_id) " +
+            statement.execute("INSERT INTO practice.posts (created, writer_id) " +
                     "VALUES( \"" + Timestamp.valueOf(LocalDateTime.now()) + "\" ," +
-                    "(SELECT MAX(id) FROM practic.writers)) ;");
+                    "(SELECT MAX(id) FROM practice.writers)) ;");
 
             resultSet = statement.executeQuery(WRITER_CREATE_FOR_POSTS);
 
@@ -98,8 +98,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             resultSet.close();
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return writer;
@@ -114,7 +114,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
         try (Statement statement = JdbcConnection.getConnection().createStatement()) {
 
-            if (statement.executeUpdate("UPDATE practic.writers SET first_name = '" + firstName +
+            if (statement.executeUpdate("UPDATE practice.writers SET first_name = '" + firstName +
                     "' , last_name = '" + lastName + "'  WHERE id = " + id + " ;") > 0) {
 
                 resultSet = statement.executeQuery(WRITER_UPDATE_FOR_POSTS + id + " ;");
@@ -144,8 +144,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 System.out.println("Не возможно изменить не существующую запись");
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return writer;
@@ -178,8 +178,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 System.out.println("... Такого писателя нет ...");
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -191,7 +191,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         List<Post> postList = new ArrayList<>();
 
 
-        // для отслежения повторных ID
+        // для отслеживания повторных ID
         Set<Long> idSet = new HashSet<>();
         List<Long> idList = new LinkedList<>();
 
@@ -241,8 +241,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             resultSet.close();
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return writerList;
